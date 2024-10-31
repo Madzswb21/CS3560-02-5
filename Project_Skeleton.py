@@ -21,7 +21,7 @@ class Staff(User):
         Staff.id_counter += 1
 
     def __str__(self): # displays vital information pertaining to Staff object
-        return f"Name: {self.name} \nID Number: {self.staffID} \nRole: {self.role}"
+        return f"Name: {self.name} \nEmail Address: {self.emailAddress} \nPhone Number: {self.phoneNumber} \nID Number: {self.staffID} \nRole: {self.role}"
 
 # subclass to create a Customer user, inherits from User superclass
 class Customer(User):
@@ -32,7 +32,7 @@ class Customer(User):
         Staff.id_counter += 1
 
     def __str__(self): # displays vital information pertaining to Customer object
-        return f"Name: {self.name} \nID Number: {self.customerID} "
+        return f"Name: {self.name} \nEmail Address: {self.emailAddress} \nPhone Number: {self.phoneNumber} \nID Number: {self.customerID} "
 
 
 class Order: # Thuan-Thien
@@ -56,11 +56,20 @@ class ItemInOrder: # Quynh
 
 # System Methods Skeleton
 
-def createCustomer(): # Cj
-    x=0
+# Customer and Staff objects take in str data types for name, email
+# take in int data types for phone number
+# Staff objects will also take in str data type for role
+# both will return str values echoing the details entered to create object
 
-def createStaff(): # Cj 
-    x=0
+def createCustomer(name, emailAddress, phoneNumber): # Cj
+    x = Customer(name, emailAddress, phoneNumber)
+    print("New Customer Created!")
+    return print(x)
+
+def createStaff(name, emailAddress, phoneNumber, role): # Cj 
+    x = Staff(name, emailAddress, phoneNumber, role)
+    print("New Staff Member Created!")
+    return print(x)
 
 def createOrder(): # Thuan-Thien
     x=0
@@ -68,10 +77,10 @@ def createOrder(): # Thuan-Thien
 def payOrder(): # Thuan-Thien
     x=0
 
-def checkOrderStatus(): # Cj 
+def checkOrderStatus(orderID): # Cj 
     x=0
 
-def updateOrderStatus(): # Cj
+def updateOrderStatus(staffID, orderID): # Cj
     x=0
 
 def createMenuItem(): # Quynh
@@ -85,3 +94,8 @@ def createMenu(): # Quynh
 
 def viewMenu(): # Quynh
     x=0
+
+
+
+
+# can use area for testing :)
