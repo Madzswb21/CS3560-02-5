@@ -45,13 +45,44 @@ class In_Person_Order(Order): # Thuan-Thien
     x=0
 
 class Menu: # Quynh
-    x=0
+    id_counter = 0 # keep track of Menu ID
+    def __init__(self, mealType, itemsInMenu):
+        self.mealType = mealType
+        self.itemsInMenu = itemsInMenu  # list attribute for itemsInMenu
+        self.menuID = "3" + str(Menu.id_counter)
+        Menu.id_counter += 1
+
+    def __str__(self): # display info of each Menu object
+        items_str = "\n - ".join(self.itemsInMenu) # each item is on a new line
+        return f"Meal Type: {self.mealType} \nItems In Menu:\n - {self.items_str} "
+        
 
 class MenuItem: # Quynh
-    x=0
+    id_counter = 0 # keep track of MenuItem ID
+    def __init__(self, description, name, price, inStock, calories):
+        self.description = description
+        self.name = name
+        self.price = price
+        self.inStock = inStock
+        self.calories = calories
+        self.menuItemID = "4" + str(MenuItem.id_counter)
+        MenuItem.id_counter += 1
+
+    def __str__(self): # display info of each MenuItem object
+        stockStatus = "In Stock" if self.inStock else "Out of Stock"  
+        return f"Description: {self.description} \nName: {self.name} \nPrice: {self.price} \nStatus: {self.stockStatus} \nCalories: {self.calories} " 
 
 class ItemInOrder: # Quynh 
-    x=0
+    id_counter = 0 # ItemInOrder ID
+    def __init__(self, menuItemID, customizationToItem):
+        ItemInOrder.__init__(self, menuItemID, customizationToItem)
+        self.menuItemID = MenuItem.menuItemID # menuItem ID is also an attrbute to link MenuItem and ItemInOrder
+        self.ItemInOrderID = "5" + str(ItemInOrder.id_counter)
+        ItemInOrder.id_counter += 1
+        self.customizationToItem = customizationToItem
+
+    def __str__(self): # display customization info of each ItemInOrder object
+        return f"Customization: {self.customizationToItem}"
 
 
 # System Methods Skeleton
@@ -104,18 +135,87 @@ def updateOrderStatus(staffMembers, activeOrders, staffID, orderID): # Cj
         else:
             print("The order does not exist. Sorry!")
            
-
+# creates a MenuItem object
+# inStock is a boolean attribute (there is stock or no stock)
 def createMenuItem(): # Quynh
-    x=0
+    description = input("Enter the item description: ")
+    name = input("Enter the item name: ")
+    
+    # get price
+    while True:
+        try:
+            price = float(input("Enter the item price: $"))
+            break
+        except ValueError:
+            print("Invalid input. Please enter a number for the price. ")
 
-def updateMenuItem(): # Quynh
-    x=0
+    # get inStock status
+    while True:
+        inStock = input("Is the item in stock? (yes/no): ").strip().lower()
+        if inStock in ['yes', 'y']:
+            inStock = True
+            break
+        elif inStock in ['no', 'n']:
+            inStock = False
+            break
+        else:
+            print("Invalid input. Please enter 'yes' or 'no'. ")
 
+    calories = input("Enter the item calories: ")
+
+    x = MenuItem(description, name, price, inStock, calories)
+    return x
+
+# this method takes in the MenuItem object that staff wants to change
+def updateMenuItem(menu_item): # Quynh
+    # prompt for new description
+    new_description = input("Enter new description: ")
+    if new_description:
+        MenuItem.description = new_description
+
+    # prompt for new name
+    new_name = input("Enter new name: ")
+    if new_name:
+        MenuItem.name = new_name
+
+    # get new price
+    while True:
+        new_price = float(input("Enter new price: $"))
+        if new_price:
+            try:
+                MenuItem.price = new_price
+                break
+            except ValueError:
+                print("Invalid input. Please enter a valid number.")
+        else:
+            break
+
+    # get new status
+
+    # get new calories
+
+# all menu items are categorized by meal type
+# each object of Menu will have one mealType value and multiple itemsInMenu values
 def createMenu(): # Quynh
-    x=0
+    mealType = input("Enter the meal type: ")
 
-def viewMenu(): # Quynh
-    x=0
+    # input items as a comma-separated list
+    items_input = input("Enter each menu item separated by commas: ") 
+    itemsInMenu = [item.strip() for item in items_input.split(",") if item.strip()]
+
+    x = Menu(mealType, itemsInMenu)
+    return x
+
+# this method takes in all objects of Menu and display all of them at once
+def viewMenu(menuLists): # Quynh
+
+    # if no Menu object has been created
+    if not menuLists:
+        print("No menu to display.")
+        return
+    # loop to display all Menu objects
+    for menuList in menuLists:
+        print(menuList)
 
 
 
