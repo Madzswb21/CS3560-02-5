@@ -77,11 +77,33 @@ def createOrder(): # Thuan-Thien
 def payOrder(): # Thuan-Thien
     x=0
 
-def checkOrderStatus(orderID): # Cj 
-    x=0
-
-def updateOrderStatus(staffID, orderID): # Cj
-    x=0
+# will take in an orderID number and a list of active orders (assume list has been created)
+# will return the status of the desired order (str)
+def checkOrderStatus(activeOrders, targetOrderID): # Cj 
+    for order in activeOrders:
+        number = getattr(order, "orderID")
+        if number == targetOrderID:
+            print("The order of the status is: " + order.status)
+        else:
+            print("The order does not exist. Sorry!")
+        
+# will take in a staffID (for verification that the user can update status of order)
+# orderID, list of StaffIDs, and list of active orders, will change the staus of the 
+# order based on Staff input
+def updateOrderStatus(staffMembers, activeOrders, staffID, orderID): # Cj
+    for order in activeOrders:
+        number = getattr(order, "orderID")
+        if number == orderID:
+            for staff in staffMembers:
+                id = getattr(staff, "staffID")
+                if id == staffID:
+                    newOrderStatus = input("Please enter the new status of the order: ")
+                    order.orderStatus = newOrderStatus
+                else:
+                    print("The staff ID does not exist. Sorry!")
+        else:
+            print("The order does not exist. Sorry!")
+           
 
 def createMenuItem(): # Quynh
     x=0
