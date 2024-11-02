@@ -36,13 +36,40 @@ class Customer(User):
 
 
 class Order: # Thuan-Thien
-    x=0
+    def __init__(order, orderID, itemOrderID, additional_comments, paymentDate, totalCost, orderStatus):
+        order.orderID = orderID
+        order.itemOrderID = itemOrderID
+        order.additional_comments = additional_comments
+        order.paymentDate = paymentDate
+        order.totalCost = totalCost
+        order.orderStatus = orderStatus
+
+    def __str__(order):
+        return f"OrderID: {order.orderID}, ItemOrderID: {order.itemOrderID}, Additional Comments: {order.additional_comments}, Payment Date: {order.paymentDate}, Total Cost: ${order.totalCost:.2f}, Order Status: {order.orderStatus}"
+
+    def update_status(order, new_status):
+        order.orderStatus = new_status
+
+    def add_comments(order, comments):
+        order.additional_comments = comments
 
 class Online_Order(Order): # Thuan-Thien
-    x=0
+    def __init__(order, orderID, itemOrderID, additional_comments, paymentDate, totalCost, orderStatus, customerID):
+        online().__init__(orderID, itemOrderID, additional_comments, paymentDate, totalCost, orderStatus)
+        
+        order.customerID = customerID
+
+    def __str__(order):
+        return online().__str__() + f", CustomerID: {order.customerID}"
 
 class In_Person_Order(Order): # Thuan-Thien
-    x=0
+        def __init__(order, orderID, itemOrderID, additional_comments, paymentDate, totalCost, orderStatus, staffID):
+        inPerson().__init__(orderID, itemOrderID, additional_comments, paymentDate, totalCost, orderStatus)
+    
+        order.staffID = staffID
+
+    def __str__(self):
+        return inPerson().__str__() + f", StaffID: {self.staffID}"
 
 class Menu: # Quynh
     x=0
@@ -71,12 +98,37 @@ def createStaff(name, emailAddress, phoneNumber, role): # Cj
     print("New Staff Member Created!")
     return print(x)
 
-def createOrder(): # Thuan-Thien
-    x=0
+def createOrder(order_type, customer): #Thuan-Thien
+    if order_type == "online":
+        return Online_Order(
+            customer.get('orderID'),
+            customer.get('itemOrderID'),
+            customer.get('additional_comments'),
+            customer.get('paymentDate'),
+            customer.get('totalCost'),
+            customer.get('orderStatus'),
+            customer.get('customerID')
+        )
+    elif order_type == "in_person":
+        return In_Person_Order(
+            customer.get('orderID'),
+            customer.get('itemOrderID'),
+            customer.get('additional_comments'),
+            customer.get('paymentDate'),
+            customer.get('totalCost'),
+            customer.get('orderStatus'),
+            customer.get('staffID')
+        )
+    else:
+        raise ValueError("Invalid order type specified. Use 'online' or 'in_person'.")
 
-def payOrder(): # Thuan-Thien
-    x=0
-
+def payOrder(customerBankingInfo, Order): #Thuan-Thien
+    # Simulating payment process using customer banking info
+    if not customerBankingInfo:
+        raise ValueError("Invalid banking information provided.")
+    
+    # Assuming payment is successful, return receipt
+    return f"Receipt: OrderID: {order.orderID}, Total Cost: ${order.totalCost:.2f}"
 # will take in an orderID number and a list of active orders (assume list has been created)
 # will return the status of the desired order (str)
 def checkOrderStatus(activeOrders, targetOrderID): # Cj 
