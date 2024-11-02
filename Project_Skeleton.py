@@ -221,7 +221,7 @@ def createMenuItem(): # Quynh
 
 # this method takes in the MenuItem object that staff wants to change
 # assume menu_item = createMenuItem()
-# might need if-else to allow staff to choose which attribute to edit
+# might need if-else to allow staff to choose which attribute to edit?
 def updateMenuItem(menu_item): # Quynh
     # get new description
     new_description = input("Enter new description: ")
@@ -246,8 +246,27 @@ def updateMenuItem(menu_item): # Quynh
             break
 
     # get new status
+    while True:
+        new_status = input("Is the item in stock? (yes/no): ").strip().lower()
+        if new_status in ['yes', 'y']:
+            menu_item.inStock = True
+            break
+        elif new_status in ['no', 'n']:
+            menu_item.inStock = False
+            break
+        elif new_status == "":
+            break
+        else:
+            print("Invalid input. Please enter 'yes' or 'no'. ")
 
     # get new calories
+    new_calories = input("Enter new calories: ")
+    if new_calories:
+        menu_item.calories = new_calories
+
+    # display updated menu item details
+    print(menu_item)
+    
 
 # all menu items are categorized by meal type
 # each object of Menu will have one mealType value and multiple itemsInMenu values
