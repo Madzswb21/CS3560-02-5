@@ -163,27 +163,30 @@ def createMenuItem(): # Quynh
 
     calories = input("Enter the item calories: ")
 
+    # instantiate an object
     x = MenuItem(description, name, price, inStock, calories)
     return x
 
 # this method takes in the MenuItem object that staff wants to change
+# assume menu_item = createMenuItem()
+# might need if-else to allow staff to choose which attribute to edit
 def updateMenuItem(menu_item): # Quynh
-    # prompt for new description
+    # get new description
     new_description = input("Enter new description: ")
     if new_description:
-        MenuItem.description = new_description
+        menu_item.description = new_description
 
-    # prompt for new name
+    # get new name
     new_name = input("Enter new name: ")
     if new_name:
-        MenuItem.name = new_name
+        menu_item.name = new_name
 
     # get new price
     while True:
         new_price = float(input("Enter new price: $"))
         if new_price:
             try:
-                MenuItem.price = new_price
+                menu_item.price = new_price
                 break
             except ValueError:
                 print("Invalid input. Please enter a valid number.")
@@ -203,10 +206,12 @@ def createMenu(): # Quynh
     items_input = input("Enter each menu item separated by commas: ") 
     itemsInMenu = [item.strip() for item in items_input.split(",") if item.strip()]
 
+    # instantiate an object
     x = Menu(mealType, itemsInMenu)
     return x
 
 # this method takes in all objects of Menu and display all of them at once
+# assume menuLists = list(Menu objects)
 def viewMenu(menuLists): # Quynh
 
     # if no Menu object has been created
