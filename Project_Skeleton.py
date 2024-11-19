@@ -63,7 +63,7 @@ class Online_Order(Order): # Thuan-Thien
         return online().__str__() + f", CustomerID: {order.customerID}"
 
 class In_Person_Order(Order): # Thuan-Thien
-        def __init__(order, orderID, itemOrderID, additional_comments, paymentDate, totalCost, orderStatus, staffID):
+    def __init__(order, orderID, itemOrderID, additional_comments, paymentDate, totalCost, orderStatus, staffID):
         inPerson().__init__(orderID, itemOrderID, additional_comments, paymentDate, totalCost, orderStatus)
     
         order.staffID = staffID
