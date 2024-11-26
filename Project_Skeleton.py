@@ -55,20 +55,20 @@ class Order: # Thuan-Thien
 
 class Online_Order(Order): # Thuan-Thien
     def __init__(order, orderID, itemOrderID, additional_comments, paymentDate, totalCost, orderStatus, customerID):
-        online().__init__(orderID, itemOrderID, additional_comments, paymentDate, totalCost, orderStatus)
+        Online_Order().__init__(orderID, itemOrderID, additional_comments, paymentDate, totalCost, orderStatus)
 
         order.customerID = customerID
 
     def __str__(order):
-        return online().__str__() + f", CustomerID: {order.customerID}"
+        return Online_Order().__str__() + f", CustomerID: {order.customerID}"
 class In_Person_Order(Order): # Thuan-Thien
     def __init__(order, orderID, itemOrderID, additional_comments, paymentDate, totalCost, orderStatus, staffID):
-        inPerson().__init__(orderID, itemOrderID, additional_comments, paymentDate, totalCost, orderStatus)
+        In_Person_Order().__init__(orderID, itemOrderID, additional_comments, paymentDate, totalCost, orderStatus)
 
         order.staffID = staffID
 
     def __str__(self):
-        return inPerson().__str__() + f", StaffID: {self.staffID}"
+        return In_Person_Order().__str__() + f", StaffID: {self.staffID}"
 
 class Menu: # Quynh
     id_counter = 0 # keep track of Menu ID
@@ -158,7 +158,7 @@ def payOrder(customerBankingInfo, Order): #Thuan-Thien
         raise ValueError("Invalid banking information provided.")
 
     # Assuming payment is successful, return receipt
-    return f"Receipt: OrderID: {order.orderID}, Total Cost: ${order.totalCost:.2f}"
+    return f"Receipt: OrderID: {Order.orderID}, Total Cost: ${Order.totalCost:.2f}"
 
 # will take in an orderID number and a list of active orders (assume list has been created)
 # will return the status of the desired order (str)
