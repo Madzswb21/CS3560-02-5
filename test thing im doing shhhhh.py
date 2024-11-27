@@ -25,6 +25,18 @@ class cafeGUI:
         self.buttonItem3 = tk.Button(text="Item", width=10,font=("Times New Roman",14))
 
         self.buttonaddto1 = tk.Button(text="add", width=10,font=("Times New Roman",10))
+        self.buttonaddto2 = tk.Button(text="add", width=10,font=("Times New Roman",10))
+        self.buttonaddto3 = tk.Button(text="add", width=10,font=("Times New Roman",10))
+
+        self.buttonItem4 = tk.Button(text="Item", width=10,font=("Times New Roman",14))
+        self.buttonItem5 = tk.Button(text="Item", width=10,font=("Times New Roman",14))
+        self.buttonItem6 = tk.Button(text="Item", width=10,font=("Times New Roman",14))
+
+        self.buttonaddto4 = tk.Button(text="add", width=10,font=("Times New Roman",10))
+        self.buttonaddto5 = tk.Button(text="add", width=10,font=("Times New Roman",10))
+        self.buttonaddto6 = tk.Button(text="add", width=10,font=("Times New Roman",10))
+
+
 
 
 
@@ -47,7 +59,17 @@ class cafeGUI:
         self.buttonItem2.grid(row = 7, column = 1, pady = 50)
         self.buttonItem3.grid(row = 7, column = 2, pady = 50)
 
-        self.buttonaddto1.grid(row = 8, column = 0, pady = 20)
+        self.buttonaddto1.grid(row = 8, column = 0, pady = 1)
+        self.buttonaddto2.grid(row = 8, column = 1, pady = 1)
+        self.buttonaddto3.grid(row = 8, column = 2, pady = 1)
+
+        self.buttonItem4.grid(row = 9, column = 0, pady = 50)
+        self.buttonItem5.grid(row = 9, column = 1, pady = 50)
+        self.buttonItem6.grid(row = 9, column = 2, pady = 50)
+
+        self.buttonaddto4.grid(row = 10, column = 0, pady = 20)
+        self.buttonaddto5.grid(row = 10, column = 1, pady = 20)
+        self.buttonaddto6.grid(row = 10, column = 2, pady = 20)
 
 
 
