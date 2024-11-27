@@ -117,9 +117,44 @@ def createMenuItem():
 def deleteMenuItem(menuItemID):
     cursor.execute("DELETE FROM MenuItem WHERE menuItemID = (%s)", (menuItemID,))
     db.commit()
+# all functions to view menu are available to all
+def viewMenu():
+    cursor.execute("SELECT itemName, itemPrice FROM MenuItem")
+    # implement GUI to display all menu items
+    for x in cursor:
+        print(x)
     db.commit()
 
+# function to view drink only menu
+def viewDrinkMenu():
+    cursor.execute("SELECT itemName, itemPrice FROM MenuItem WHERE category = 'drink'")
+    # implement GUI to display
+    for x in cursor:
+        print(x)
+    db.commit()
 
+# function to view food only menu
+def viewFoodMenu():
+    cursor.execute("SELECT itemName, itemPrice FROM MenuItem WHERE category = 'food'")
+    # implement GUI to display all menu items
+    for x in cursor:
+        print(x)
+    db.commit()
+
+# function to view other category
+def viewOtherMenu():
+    cursor.execute("SELECT itemName, itemPrice FROM MenuItem WHERE category = 'other'")
+    # implement GUI to display all menu items
+    for x in cursor:
+        print(x)
+    db.commit()
+
+# function to view a menu item 
+# show name, desc, price, and calories
+def viewMenuItem(menuItemID):
+    cursor.execute("SELECT itemName, itemDesc, itemPrice, calories FROM MenuItem WHERE menuItemID = (%s)", (menuItemID,))
+    print(cursor.fetchall())
+    db.commit()
 
 # takes in an order's ID and a menu item's ID to add an item
 # from the menu to a specific order
