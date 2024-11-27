@@ -98,9 +98,25 @@ def createInPersonOrder(inPersonID):
 # create an instance of Menu Item class
     # this one may be a bit tricky to implement to GUI, works fine in query
     # but may cause issue with button and image display on GUI
-def createMenuItem(itemName, itemDesc, itemPrice, isInStock, calories):
-    cursor.execute("INSERT INTO MenuItem (itemName, itemDesc, itemPrice, isInStock, calories) VALUES (%s,%s,%s,%s,%s)", 
-        (itemName, itemDesc, itemPrice, isInStock, calories))
+def createMenuItem():
+    itemName = input("Name: ")
+    itemDesc = input("Description: ")
+    try:
+        itemPrice = float(input("Price: "))
+    except ValueError:
+        print("Error.")
+    stock = input("Stock: ")
+    calories = input("Calories: ")
+    category = input("Category: ")      # is it possible to implement radio button for this (food/drink/other)?
+    cursor.execute("INSERT INTO MenuItem (itemName, itemDesc, itemPrice, stock, calories, category) VALUES (%s,%s,%s,%s,%s,%s)", 
+        (itemName, itemDesc, itemPrice, stock, calories, category))
+    db.commit()
+
+# implement this function as a delete button next to the menu item
+# only available to staff
+def deleteMenuItem(menuItemID):
+    cursor.execute("DELETE FROM MenuItem WHERE menuItemID = (%s)", (menuItemID,))
+    db.commit()
     db.commit()
 
 
