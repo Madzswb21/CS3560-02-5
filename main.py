@@ -12,6 +12,7 @@ class menuItemButton: #for menu page
         self.cart.pack(side="bottom")
         self.view.pack(side="top")
         self.frame.grid(row = r, column = c, pady = 50)
+        
 
 
 class cafeGUI: 
