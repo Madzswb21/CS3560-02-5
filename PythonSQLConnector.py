@@ -27,8 +27,8 @@ import random # used for orderID generation
 db = mysql.connector.connect(
     host = "localhost",
     user = "root", 
-    password = "yomama",
-    database = "CafeRestaurant"
+    password = "stella96",
+    database = "caferestaurant"
 )
 
 # acts as the "connection" to the database, used to write queries back to db
@@ -117,11 +117,22 @@ def createMenuItem():
 def deleteMenuItem(menuItemID):
     cursor.execute("DELETE FROM MenuItem WHERE menuItemID = (%s)", (menuItemID,))
     db.commit()
+
+# function to update menu item
+# only available to staff
+def updateMenuItem(itemName, itemDesc, itemPrice, stock, calories, category, menuItemID):
+    
+
+    cursor.execute("UPDATE MenuItem SET itemName = (%s), itemDesc = (%s), itemPrice = (%s), stock = (%s), calories = (%s), category = (%s) WHERE menuItemID = (%s)", 
+        (itemName, itemDesc, itemPrice, stock, calories, category, menuItemID)) 
+    db.commit()
+
 # all functions to view menu are available to all
 def viewMenu():
     cursor.execute("SELECT itemName, itemPrice FROM MenuItem")
     # implement GUI to display all menu items
-    for x in cursor:
+    menu = cursor.fetchall()
+    for x in menu:
         print(x)
     db.commit()
 
@@ -129,7 +140,8 @@ def viewMenu():
 def viewDrinkMenu():
     cursor.execute("SELECT itemName, itemPrice FROM MenuItem WHERE category = 'drink'")
     # implement GUI to display
-    for x in cursor:
+    drink_items = cursor.fetchall()
+    for x in drink_items:
         print(x)
     db.commit()
 
@@ -137,7 +149,8 @@ def viewDrinkMenu():
 def viewFoodMenu():
     cursor.execute("SELECT itemName, itemPrice FROM MenuItem WHERE category = 'food'")
     # implement GUI to display all menu items
-    for x in cursor:
+    food_items = cursor.fetchall()
+    for x in food_items:
         print(x)
     db.commit()
 
@@ -145,7 +158,8 @@ def viewFoodMenu():
 def viewOtherMenu():
     cursor.execute("SELECT itemName, itemPrice FROM MenuItem WHERE category = 'other'")
     # implement GUI to display all menu items
-    for x in cursor:
+    other_items = cursor.fetchall()
+    for x in other_items:
         print(x)
     db.commit()
 
@@ -153,7 +167,8 @@ def viewOtherMenu():
 # show name, desc, price, and calories
 def viewMenuItem(menuItemID):
     cursor.execute("SELECT itemName, itemDesc, itemPrice, calories FROM MenuItem WHERE menuItemID = (%s)", (menuItemID,))
-    print(cursor.fetchall())
+    menu_item = cursor.fetchone()
+    print(menu_item)
     db.commit()
 
 # takes in an order's ID and a menu item's ID to add an item
@@ -177,6 +192,7 @@ def addItemsToOrder(orderID, menuItemID, quantity):
     else:
         cursor.execute("UPDATE InPersonOrder SET totalCost = (%s) WHERE inPersonID = (%s)",
                        (totalCost, orderID))
+        
     db.commit()
 
  
@@ -213,6 +229,7 @@ def removeItemsFromOrder(orderID, menuItemID):
 # update the value of the order's "orderStatus" and "paymentDate"
 def payOrder(orderID, personID):
     x=0
+    # update menu item stock after the order has been paid
 
 # takes an order ID and returns its current status (ready for pickup, cooking, etc.)
 def checkOrderStatus(orderID):
@@ -295,3 +312,10 @@ removeItemsFromOrder(50014, 5)
 removeItemsFromOrder(59530, 10)
 removeItemsFromOrder(85655, 15)
 '''
+
+# createMenuItem()
+# viewMenu()
+#viewDrinkMenu()
+#viewFoodMenu()
+#viewOtherMenu()
+#viewMenuItem(15)
