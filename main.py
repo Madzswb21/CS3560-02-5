@@ -4,15 +4,14 @@ class menuItemButton: #for menu page
     instances = [] #holds every instance of the button just in case we need it!
     def __init__(self, text, page, img):
         menuItemButton.instances.append(self)
-        self.frame = tk.Frame(width=125, height=125,bg="white")
+        self.f = tk.Frame(width=125, height=125,bg="white")
         self.img = tk.PhotoImage(file=img)
         self.cart = tk.Button(self.frame, text="Add to Cart", width=10,font=("Times New Roman",8))
         self.view = tk.Button(self.frame, text="View Item", width=125,font=("Times New Roman",8), image=self.img)
     def grid(self, r, c):
         self.cart.pack(side="bottom")
         self.view.pack(side="top")
-        self.frame.grid(row = r, column = c, pady = 50)
-        
+        self.f.grid(row = r, column = c, pady = 50)
 
 
 class cafeGUI: 
