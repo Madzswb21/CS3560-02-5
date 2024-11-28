@@ -13,13 +13,9 @@ class menuItemButton: #for menu page
         self.view.pack(side="top")
         self.frame.grid(row = r, column = c, pady = 50)
 
-'''
-Note for GUI friends
 
-
-'''
 class cafeGUI: 
-    def __init__(self):
+    def __init__(self): #note to self: no widgets should be added here! they should only be added to the functions for pages!
         self.root = tk.Tk()
         self.root.geometry("820x560")
         self.root.title("Cafe Webpage") 
