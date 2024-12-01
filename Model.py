@@ -12,7 +12,7 @@ import hashlib
 db = mysql.connector.connect(
     host = "localhost",
     user = "root", 
-    password = "stella96",
+    password = "yomama",
     database = "caferestaurant"
 )
 
