@@ -4,7 +4,7 @@
 
 import mysql.connector # make sure yu have connector set up or else this won't work!
 import random # used for orderID generation
-import hashlib
+import hashlib 
 
 # sets up connection to existing database "CafeRestaurant"
     # note for team: you might have to change user and password values
@@ -12,7 +12,7 @@ import hashlib
 db = mysql.connector.connect(
     host = "localhost",
     user = "root", 
-    password = "yomama",
+    password = "stella96",
     database = "caferestaurant"
 )
 
@@ -243,8 +243,107 @@ class Order:
         
         return self.orderID
     
+    def payOrder(self): # this function needs orderID input (store current orderID in self.orderID)
+        # Check if the order exists and get order details
+        orderType = self.getOrderType()
+
+        if orderType == "online":
+            cursor.execute("SELECT * FROM OnlineOrder WHERE onlineID = (%s)", (self.orderID,))
+        else:
+            cursor.execute("SELECT * FROM InPersonOrder WHERE inPersonID = (%s)", (self.orderID,))
+
+        order = cursor.fetchone()
+        if not order:
+            print("Order not found.")
+            return
+
+        #Update the order status to 'paid'
+        if orderType == "online":
+            cursor.execute("UPDATE OnlineOrder SET orderStatus = 'paid', paymentDate = NOW() WHERE onlineID = (%s)", (self.orderID,))
+        else:
+            cursor.execute("UPDATE InPersonOrder SET orderStatus = 'paid', paymentDate = NOW() WHERE inPersonID = (%s)", (self.orderID,))
+        db.commit()
+
+        #Update the stock of each menu item in the order
+        cursor.execute("SELECT menuItemID, quantity FROM ItemsInOrder WHERE orderID = (%s)", (self.orderID,))
+        items = cursor.fetchall()
+
+        for item in items:
+            menuItemID, quantity = item
+            cursor.execute("SELECT stock FROM MenuItem WHERE menuItemID = (%s)", (menuItemID,))
+            stock = cursor.fetchone()[0]
+
+            if stock >= quantity:
+                new_stock = stock - quantity
+                cursor.execute("UPDATE MenuItem SET stock = (%s) WHERE menuItemID = (%s)", (new_stock, menuItemID))
+            else:
+                print(f"Not enough stock for item ID {menuItemID}. Cannot complete order.")
+                return
+
+        db.commit()
+        print("Order has been paid and stock updated.") 
+
+    def updateOrderStatus(self, staffID, newStatus):  #needs orderID, staffID, newStatus (text entry) input
+        #Check if the staff member exists
+        cursor.execute("SELECT * FROM Staff WHERE staffID = (%s)", (staffID,))
+        staff = cursor.fetchone()
+        if not staff:
+            print("Staff member not found. Access denied.")
+            return
+
+        #Get the current status of the order
+        orderType = self.getOrderType()
+        if orderType == "online":
+            cursor.execute("SELECT orderStatus FROM OnlineOrder WHERE onlineID = (%s)", (self.orderID,))
+        else:
+            cursor.execute("SELECT orderStatus FROM InPersonOrder WHERE inPersonID = (%s)", (self.orderID,))
+
+        orderStatus = cursor.fetchone()
+        if not orderStatus:
+            print("Order not found.")
+            return
+
+        #Prompt staff to enter the new status for the order
+        #newStatus = input("Enter the new status for the order (e.g., 'cooking', 'ready for pickup', 'completed', 'cancelled'): ")
+
+        #Update the order status
+        if orderType == "online":
+            cursor.execute("UPDATE OnlineOrder SET orderStatus = (%s) WHERE onlineID = (%s)", (newStatus, self.orderID))
+        else:
+            cursor.execute("UPDATE InPersonOrder SET orderStatus = (%s) WHERE inPersonID = (%s)", (newStatus, self.orderID))
+
+        # if order gets picked up, staff updates completed, pickupTime is also updated
+        if self.orderStatus == 'completed':
+            cursor.execute("UPDATE OnlineOrder SET pickupTime = NOW()")
+        db.commit()
+
+        print(f"Order status has been updated to: {self.orderStatus}")
+
+    def checkOrderStatus(self): # needs orderID input
+        #Check if the order exists and get its status
+        orderType = self.getOrderType()
+
+        if orderType == "online":
+            cursor.execute("SELECT orderStatus FROM OnlineOrder WHERE onlineID = (%s)", (self.orderID,))
+        else:
+            cursor.execute("SELECT orderStatus FROM InPersonOrder WHERE inPersonID = (%s)", (self.orderID,))
+
+        orderStatus = cursor.fetchone()
+        if not orderStatus:
+            print("Order not found.")
+            return
+
+        print(f"The current status of the order is: {orderStatus[0]}")
+        return orderStatus[0]
+
+    def getOrderType(self):
+        cursor.execute("SELECT orderType FROM Orders WHERE orderID = (%s)", (self.orderID,))
+        orderType = cursor.fetchone()
+        orderType = orderType[0]
+        db.commit()
+        return orderType
     
-    
+
 
 # define OnlineOrder class
 class OnlineOrder(Order):
@@ -257,8 +356,8 @@ class OnlineOrder(Order):
         self.pickupTime = pickupTime
 
     # create an instance of order if no order is active
-    # 1st instance of order has no payment date, no comments, no cost, no pickupTime
-    def createOnlineOrder(self, custID):
+    # 1st instance of order has no payment date, no comments, 0 cost, no pickupTime
+    def createOnlineOrder(self, custID):  # needs customerID input
         self.orderType = 'online'
         self.onlineID = self.createOrder()
         self.orderStatus = 'active'
@@ -267,18 +366,6 @@ class OnlineOrder(Order):
         (self.onlineID, custID, self.orderStatus, self.totalCost))
         db.commit()
 
-    def removeOnlineOrder(self):
-        cursor.execute("DELETE FROM OnlineOrder WHERE onlineID = %s", (self.onlineID,))
-        cursor.execute("DELETE FROM Orders WHERE orderID = %s", (self.onlineID,))
-
-        db.commit()
-
-    def payOnlineOrder(self):
-        x=0
-
-    def checkOnlineOrderStatus(self):
-        cursor.execute("SELECT orderStatus FROM OnlineOrder WHERE onlineID = %s", (self.onlineID,))
-        db.commit()
 
 # define InPersonOrder class
 class InPersonOrder(Order):
@@ -292,7 +379,7 @@ class InPersonOrder(Order):
 
     # create an instance of order if no order is active
     # 1st instance of order has no payment date, no comments, no cost, no pickupTime
-    def createInPersonOrder(self, staffID):
+    def createInPersonOrder(self, staffID): # nees staffID input
         self.orderType = 'in person'
         self.inPersonID = self.createOrder()
         self.orderStatus = 'active'
@@ -301,11 +388,14 @@ class InPersonOrder(Order):
         (self.inPersonID, staffID, self.orderStatus, self.totalCost))
         db.commit()
 
+    '''
     def removeInPersonOrder(self):
         cursor.execute("DELETE FROM InPersonOrder WHERE inPersonID = %s", (self.inPersonID,))
         cursor.execute("DELETE FROM Orders WHERE orderID = %s", (self.inPersonID,))
 
         db.commit()
+        '''
+    
 
 
 # define ItemInOrder class
@@ -317,7 +407,7 @@ class ItemsInOrder:
     # create a popup-like window to input selection
     # use combobox to make dropdown menu for item name
     # show items in the order in treeview
-    def addItemsToOrder(self, menuItemID, orderID):
+    def addItemsToOrder(self, menuItemID, orderID): # needs menuItemID (fetched using itemName), orderID, quantity, customization input
         cursor.execute("INSERT INTO ItemsInOrder (orderID, menuItemID, quantity, customization) VALUES (%s,%s,%s,%s)",
                    (orderID, menuItemID, self.quantity, self.customization))
         db.commit()
@@ -339,7 +429,7 @@ class ItemsInOrder:
             
         db.commit()
     
-    def removeItemsFromOrder(self, menuItemID, orderID):
+    def removeItemsFromOrder(self, menuItemID, orderID): # needs menuItemID (fetched using itemName), orderID
 
         orderType = self.getOrderType(orderID)
         totalCost = self.getTotalCost(orderID)
@@ -361,7 +451,6 @@ class ItemsInOrder:
             cursor.execute("UPDATE InPersonOrder SET totalCost = (%s) WHERE inPersonID = (%s)",
                         (totalCost, orderID))
         db.commit()
-
 
     # internal functions used by larger functions (makes code cleaner)
 
@@ -403,7 +492,7 @@ class ItemsInOrder:
 menuitem = MenuItem('name', 'desc', 5, 5, 100, 'food', 'img.png')
 #menuitem.createMenuItem()
 
-menuitem.getMenuItems()
+#menuitem.getMenuItems()
 customer = Customer('qlam', '123456', 'Quynh', 'Lam', 'qlam@cpp.edu', '111-222-3333', '1000 Main St.')
 
 #custID = customer.login()
@@ -428,7 +517,12 @@ inpersonorder = InPersonOrder(10000, 'none', '1/1/2000', 'none', 5.00, 12)
 
 
 iteminorder = ItemsInOrder(1, 'none')
-#iteminorder.addItemsToOrder(4, 61890)
+#iteminorder.addItemsToOrder(4, 89815)
 #iteminorder.removeItemsFromOrder(4, 61890)
 #iteminorder.addItemsToOrder(4, 32627)
 #iteminorder.removeItemsFromOrder(4, 32627)
+
+order.orderID = 89815
+#order.checkOrderStatus()
+#order.payOrder()
+#order.updateOrderStatus(1002)
