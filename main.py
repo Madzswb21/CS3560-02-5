@@ -72,7 +72,7 @@ class cafeGUI:
         self.buttonDrink = tk.Button(self.root,text="Drink", width=5,font=("Times New Roman",14))
         self.buttonFood = tk.Button(self.root,text="Food", width=5,font=("Times New Roman",14))
         self.buttonOther = tk.Button(self.root,text="Other", width=5,font=("Times New Roman",14))
-        self.pancakeItem = menuItemButton(self, "pancakes", "description", 2.99, 5, 200, "other", "images\images.png", "images\drink (1).png")
+        #self.pancakeItem = menuItemButton(self, "pancakes", "description", 2.99, 5, 200, "other", "images\images.png", "images\drink (1).png")
         
         self.item = []
         menu_items = m.MenuItem.getMenuItems(self)
@@ -114,14 +114,15 @@ class cafeGUI:
         self.buttonFood.grid(row = 5, column = 2, pady = 6, columnspan=2, sticky="ew")
         self.buttonOther.grid(row = 5, column = 4, pady = 6, columnspan=2, sticky="ew")    
 
-        self.pancakeItem.grid(8,0)
+        #self.pancakeItem.grid(8,0)
 
-        self.item[0].grid(8,1)
-        self.item[1].grid(8,2)
-        self.item[2].grid(8,3)
-        self.item[3].grid(8,4)
-        self.item[4].grid(9,0)
-        self.item[5].grid(9,1)
+        self.item[0].grid(8,0)
+        self.item[1].grid(8,1)
+        self.item[2].grid(8,2)
+        self.item[3].grid(8,3)
+        self.item[4].grid(8,4)
+        self.item[5].grid(9,0)
+        self.item[6].grid(9,1)
         
 
     def checkOut(self):
