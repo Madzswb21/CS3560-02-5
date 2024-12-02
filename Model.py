@@ -12,7 +12,7 @@ import hashlib
 db = mysql.connector.connect(
     host = "localhost",
     user = "root", 
-    password = "stella96",
+    password = "yomama",
     database = "caferestaurant"
 )
 
@@ -397,7 +397,6 @@ class InPersonOrder(Order):
         '''
     
 
-
 # define ItemInOrder class
 class ItemsInOrder:
     def __init__(self, quantity, customization):    
@@ -522,7 +521,8 @@ iteminorder = ItemsInOrder(1, 'none')
 #iteminorder.addItemsToOrder(4, 32627)
 #iteminorder.removeItemsFromOrder(4, 32627)
 
-order.orderID = 89815
+
+#order.orderID = 89815
 #order.checkOrderStatus()
 #order.payOrder()
 #order.updateOrderStatus(1002)

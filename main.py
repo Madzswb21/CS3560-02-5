@@ -1,7 +1,5 @@
 import tkinter as tk
 import Model as m
-from PIL import Image, ImageTk
-#import controller as c
 
 '''
 this class inherits MenuItem from the project skeleton, it just does formatting tkinter things!
