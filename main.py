@@ -44,7 +44,7 @@ def clearPage(self) - clears all the widgets in a page - run this at the beginni
 side note: I created widgets in the __init__ but only put them into a grid in the functions for each page!
 '''
 
-class cafeGUI: 
+class cafeGUI(): 
     def __init__(self): #note to self: no widgets should be "run" here! they should only be added to the functions for pages!
         self.root = tk.Tk()
         self.root.geometry("820x560")
@@ -67,23 +67,16 @@ class cafeGUI:
         self.searchBox = tk.Entry(self.root)
 
         # widgets for menuPage
-        self.buttonDrink = tk.Button(self.root,text="Drink", width=5,font=("Times New Roman",14))
-        self.buttonFood = tk.Button(self.root,text="Food", width=5,font=("Times New Roman",14))
-        self.buttonOther = tk.Button(self.root,text="Other", width=5,font=("Times New Roman",14))
+        self.buttonDrink = tk.Button(self.root,text="Drink", width=5,font=("Times New Roman",14), command=self.drinkMenuPage)
+        self.buttonFood = tk.Button(self.root,text="Food", width=5,font=("Times New Roman",14), command=self.foodMenuPage)
+        self.buttonOther = tk.Button(self.root,text="Other", width=5,font=("Times New Roman",14), command=self.otherMenuPage)
         #self.pancakeItem = menuItemButton(self, "pancakes", "description", 2.99, 5, 200, "other", "images\images.png", "images\drink (1).png")
         
+        # all menu item fetched and stored in menuItemButton
         self.item = []
         menu_items = m.MenuItem.getMenuItems(self)
-        for menu_item in menu_items:
-            name = menu_item[0]
-            description = menu_item[1]
-            price = menu_item[2]
-            stock = menu_item[3]
-            calories = menu_item[4]
-            category = menu_item[5]
-            image = menu_item[6]
+        for name, description, price, stock, calories, category, image in menu_items:
             self.item.append(menuItemButton(self, name, description, price, stock, calories, category, "images\images.png", image))
-
 
 
         # widgets for itemPage
@@ -110,19 +103,31 @@ class cafeGUI:
         self.naviBar()
         self.buttonDrink.grid(row = 5, column = 0, pady = 6, columnspan=2, sticky="ew")
         self.buttonFood.grid(row = 5, column = 2, pady = 6, columnspan=2, sticky="ew")
-        self.buttonOther.grid(row = 5, column = 4, pady = 6, columnspan=2, sticky="ew")    
+        self.buttonOther.grid(row = 5, column = 4, pady = 6, columnspan=2, sticky="ew")
+        #self.buttonAdd.grid(row = )    
 
         #self.pancakeItem.grid(8,0)
-
-        self.item[0].grid(8,0)
-        self.item[1].grid(8,1)
-        self.item[2].grid(8,2)
-        self.item[3].grid(8,3)
-        self.item[4].grid(8,4)
-        self.item[5].grid(9,0)
-        self.item[6].grid(9,1)
         
-
+        # grids of all menu items
+        row_num = 8
+        col_num = 0
+        for item in self.item:
+            item.grid(row_num, col_num)
+            col_num += 1
+            if col_num == 6:
+                col_num = 0
+                row_num += 1
+    
+    
+        
+    '''
+    def removeMenuItemButton(self):
+        # fetch menuitemID from selecting the item
+        m.MenuItem.deleteMenuItem(self, itemID)
+    def updateMenuItemButton(self):
+        x=0
+    '''
+    
     def checkOut(self):
         self.clearPage()
     
@@ -156,6 +161,64 @@ class cafeGUI:
         else:
             self.pages[self.pageIndex](self.currentItemPage) 
 
+    def drinkMenuPage(self):
+        self.clearPage()
+        self.naviBar()
+        # fetch drink items and store them menuItemButton
+        self.drinks = []
+        drink_items = m.MenuItem.getDrinkMenu(self)
+        for name, description, price, stock, calories, category, image in drink_items:
+            self.drinks.append(menuItemButton(self, name, description, price, stock, calories, category, "images\images.png", image))
+
+        # grids of all drink items 
+        row_num = 8
+        col_num = 0
+        for drink in self.drinks:
+            drink.grid(row_num, col_num)
+            col_num += 1
+            if col_num == 6:
+                col_num = 0
+                row_num += 1
+
+    def foodMenuPage(self):
+        self.clearPage()
+        self.naviBar()
+
+        # fetch food items and store them menuItemButton
+        self.foods = []
+        food_items = m.MenuItem.getFoodMenu(self)
+        for name, description, price, stock, calories, category, image in food_items:
+            self.foods.append(menuItemButton(self, name, description, price, stock, calories, category, "images\images.png", image))
+
+        # grids of all food items 
+        row_num = 8
+        col_num = 0
+        for food in self.foods:
+            food.grid(row_num, col_num)
+            col_num += 1
+            if col_num == 6:
+                col_num = 0
+                row_num += 1
+
+    def otherMenuPage(self):
+        self.clearPage()
+        self.naviBar()
+
+        # fetch other items and store them menuItemButton
+        self.otherItems = []
+        other_items = m.MenuItem.getOtherMenu(self)
+        for name, description, price, stock, calories, category, image in other_items:
+            self.otherItems.append(menuItemButton(self, name, description, price, stock, calories, category, "images\images.png", image))
+
+        # grids of all other items 
+        row_num = 8
+        col_num = 0
+        for other in self.otherItems:
+            other.grid(row_num, col_num)
+            col_num += 1
+            if col_num == 6:
+                col_num = 0
+                row_num += 1
 
 
 cafeGUI().root.mainloop()

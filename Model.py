@@ -12,7 +12,7 @@ import hashlib
 db = mysql.connector.connect(
     host = "localhost",
     user = "root", 
-    password = "yomama",
+    password = "stella96",
     database = "caferestaurant"
 )
 
@@ -156,7 +156,7 @@ class MenuItem:
 
     # function to view drink only menu
     def getDrinkMenu(self):
-        cursor.execute("SELECT itemName, itemPrice FROM MenuItem WHERE category = 'drink'")
+        cursor.execute("SELECT itemName, itemDesc, itemPrice, stock, calories, category, image FROM MenuItem WHERE category = 'drink'")
         # implement GUI to display
         drink_items = cursor.fetchall()
         #for x, y in drink_items:
@@ -166,7 +166,7 @@ class MenuItem:
 
     # function to view food only menu
     def getFoodMenu(self):
-        cursor.execute("SELECT itemName, itemPrice FROM MenuItem WHERE category = 'food'")
+        cursor.execute("SELECT itemName, itemDesc, itemPrice, stock, calories, category, image FROM MenuItem WHERE category = 'food'")
         # implement GUI to display all menu items
         food_items = cursor.fetchall()
         #for x, y in food_items:
@@ -176,7 +176,7 @@ class MenuItem:
 
     # function to view other category
     def getOtherMenu(self):
-        cursor.execute("SELECT itemName, itemPrice FROM MenuItem WHERE category = 'other'")
+        cursor.execute("SELECT itemName, itemDesc, itemPrice, stock, calories, category, image FROM MenuItem WHERE category = 'other'")
         # implement GUI to display all menu items
         other_items = cursor.fetchall()
         #for x , y in other_items:
