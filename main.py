@@ -1,5 +1,7 @@
 import tkinter as tk
-import Project_Skeleton as ps
+import Model as m
+from PIL import Image, ImageTk
+#import controller as c
 
 '''
 this class inherits MenuItem from the project skeleton, it just does formatting tkinter things!
@@ -9,18 +11,19 @@ Parameters:
     img: thumbnail on menu page
     bigImg: big picture on menuItem Page
 '''
-class menuItemButton (ps.MenuItem):  
+class menuItemButton (m.MenuItem):  
     instances = [] #holds every instance of the button just in case we need it!
-    def __init__(self, GUI, name, description, price, inStock, calories, img, bigImg):
-        ps.MenuItem.__init__(self, description, name, price, inStock, calories)
+    def __init__(self, GUI, name, description, price, stock, calories, category, img, image):
+        m.MenuItem.__init__(self, name, description, price, stock, calories, category, image)
         menuItemButton.instances.append(self)
         self.GUI = GUI
         self.frame = tk.Frame(width=125, height=125,bg="white")
         self.img = tk.PhotoImage(file=img)
-        self.bigImg = tk.PhotoImage(file=bigImg)
+        self.image = tk.PhotoImage(file=image)
         self.cart = tk.Button(self.frame, text="Add to Cart", width=10,font=("Times New Roman",8), command=lambda:self.addToCart())
         self.view = tk.Button(self.frame, text="View Item", width=125,font=("Times New Roman",8), image=self.img, command=lambda:self.GUI.itemPage(self))
-    
+
+
     def grid(self, r, c):
         self.cart.pack(side="bottom")
         self.view.pack(side="top")
@@ -29,6 +32,8 @@ class menuItemButton (ps.MenuItem):
     def addToCart(self): # i dont think we need this, but i'll keep it just in case idk
         print("hello")
 
+    #def set_controller(self, c.MenuItemController):
+        #self.controller = c.MenuItemController
 
 '''
 here is the method I used to make sure we can switch between pages!
@@ -67,7 +72,21 @@ class cafeGUI:
         self.buttonDrink = tk.Button(self.root,text="Drink", width=5,font=("Times New Roman",14))
         self.buttonFood = tk.Button(self.root,text="Food", width=5,font=("Times New Roman",14))
         self.buttonOther = tk.Button(self.root,text="Other", width=5,font=("Times New Roman",14))
-        self.pancakeItem = menuItemButton(self, "pancakes", "description", 2.99, True, 200, "images\images.png", "images\drink (1).png")
+        self.pancakeItem = menuItemButton(self, "pancakes", "description", 2.99, 5, 200, "other", "images\images.png", "images\drink (1).png")
+        
+        self.item = []
+        menu_items = m.MenuItem.getMenuItems(self)
+        for menu_item in menu_items:
+            name = menu_item[0]
+            description = menu_item[1]
+            price = menu_item[2]
+            stock = menu_item[3]
+            calories = menu_item[4]
+            category = menu_item[5]
+            image = menu_item[6]
+            self.item.append(menuItemButton(self, name, description, price, stock, calories, category, "images\images.png", image))
+
+
 
         # widgets for itemPage
         self.itemImg = ""
@@ -97,6 +116,14 @@ class cafeGUI:
 
         self.pancakeItem.grid(8,0)
 
+        self.item[0].grid(8,1)
+        self.item[1].grid(8,2)
+        self.item[2].grid(8,3)
+        self.item[3].grid(8,4)
+        self.item[4].grid(9,0)
+        self.item[5].grid(9,1)
+        
+
     def checkOut(self):
         self.clearPage()
     
@@ -109,7 +136,7 @@ class cafeGUI:
     def itemPage(self, item):
         self.clearPage()
         self.naviBar()
-        self.itemImg = tk.Label(self.root, image=item.bigImg)
+        self.itemImg = tk.Label(self.root, image=item.image)
         self.costLabel = tk.Label(self.root, text="Cost: $"+str(item.price), width=20,font=("Times New Roman",14))
 
         self.itemImg.grid(row=1,column=0, rowspan=4, pady = 10, columnspan=2)

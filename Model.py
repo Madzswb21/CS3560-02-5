@@ -12,7 +12,7 @@ import hashlib
 db = mysql.connector.connect(
     host = "localhost",
     user = "root", 
-    password = "yomama",
+    password = "stella96",
     database = "caferestaurant"
 )
 
@@ -186,12 +186,13 @@ class MenuItem:
 
     # function to view a menu item 
     # show name, desc, price, and calories
-    def getMenuItem(self, itemID):
-        cursor.execute("SELECT itemName, itemDesc, itemPrice, calories FROM MenuItem WHERE menuItemID = (%s)", (itemID,))
-        menu_item = cursor.fetchone()
-        #print(menu_item[0], "and", menu_item[1])
+    def getMenuItems(self):
+        cursor.execute("SELECT itemName, itemDesc, itemPrice, stock, calories, category, image FROM MenuItem")
+        menu_items = cursor.fetchall()
+        #for menu_item in menu_items:
+            #print(menu_item[0], "and", menu_item[1])
         db.commit()
-        return menu_item
+        return menu_items
     
     # function to fetch all menu names
     def getMenuName(self):
@@ -402,7 +403,7 @@ class ItemsInOrder:
 menuitem = MenuItem('name', 'desc', 5, 5, 100, 'food', 'img.png')
 #menuitem.createMenuItem()
 
-#menuitem.getMenuItem(1)
+menuitem.getMenuItems()
 customer = Customer('qlam', '123456', 'Quynh', 'Lam', 'qlam@cpp.edu', '111-222-3333', '1000 Main St.')
 
 #custID = customer.login()
@@ -410,7 +411,7 @@ customer = Customer('qlam', '123456', 'Quynh', 'Lam', 'qlam@cpp.edu', '111-222-3
 #customer.createCustomer()
 
 staff = Staff('qlam', '123456', 'Quynh', 'Lam', 'qlam@cpp.edu', '111-222-3333', 'server')
-staff.createStaff()
+#staff.createStaff()
 #staffID = staff.login()
 
 order = Order(10000, 'online')
