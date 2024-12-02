@@ -27,7 +27,7 @@ import random # used for orderID generation
 db = mysql.connector.connect(
     host = "localhost",
     user = "root", 
-    password = "stella96",
+    password = "yomama",
     database = "caferestaurant"
 )
 
