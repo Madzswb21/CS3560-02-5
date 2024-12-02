@@ -145,12 +145,24 @@ INSERT INTO MenuItem (itemName, itemDesc, itemPrice, stock, calories, category) 
 
 
 -- test img 
-UPDATE MenuItem SET image = "img/turkey.png" WHERE menuItemID = 1;
-UPDATE MenuItem SET image = "img/eggsandwich.png" WHERE menuItemID = 2;
-UPDATE MenuItem SET image = "img/vanillalatte.png" WHERE menuItemID = 6;
-UPDATE MenuItem SET image = "img/matchalatte.png" WHERE menuItemID = 7;
-UPDATE MenuItem SET image = "img/croissant.png" WHERE menuItemID = 11;
-UPDATE MenuItem SET image = "img/fries.png" WHERE menuItemID = 12;
+UPDATE MenuItem SET image = "img\\turkey.png" WHERE menuItemID = 1;
+UPDATE MenuItem SET image = "img\\eggsandwich.png" WHERE menuItemID = 2;
+UPDATE MenuItem SET image = "img\\caesar.png" WHERE menuItemID = 3;
+UPDATE MenuItem SET image = "img\\frenchonion.png" WHERE menuItemID = 4;
+UPDATE MenuItem SET image = "img\\chickensoup.png" WHERE menuItemID = 5;
+UPDATE MenuItem SET image = "img\\vanillalatte.png" WHERE menuItemID = 6;
+UPDATE MenuItem SET image = "img\\matchalatte.png" WHERE menuItemID = 7;
+UPDATE MenuItem SET image = "img\\coffee.png" WHERE menuItemID = 8;
+UPDATE MenuItem SET image = "img\\greentea.png" WHERE menuItemID = 9;
+UPDATE MenuItem SET image = "img\\mocha.png" WHERE menuItemID = 10;
+UPDATE MenuItem SET image = "img\\croissant.png" WHERE menuItemID = 11;
+UPDATE MenuItem SET image = "img\\fries.png" WHERE menuItemID = 12;
+UPDATE MenuItem SET image = "img\\salad.png" WHERE menuItemID = 13;
+UPDATE MenuItem SET image = "img\\muffin.png" WHERE menuItemID = 14;
+UPDATE MenuItem SET image = "img\\brownie.png" WHERE menuItemID = 15;
+
+
+
 
 
 
