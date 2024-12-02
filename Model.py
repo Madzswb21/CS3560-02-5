@@ -132,8 +132,8 @@ class MenuItem:
 
     # implement this function as a delete button next to the menu item
     # only available to staff
-    def deleteMenuItem(self, itemID):
-        cursor.execute("DELETE FROM MenuItem WHERE menuItemID = (%s)", (itemID,))
+    def deleteMenuItem(self, itemName):
+        cursor.execute("DELETE FROM MenuItem WHERE itemName = (%s)", (itemName,))
         db.commit()
 
     # function to update menu item

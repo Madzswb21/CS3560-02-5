@@ -19,12 +19,14 @@ class menuItemButton (m.MenuItem):
         self.img = tk.PhotoImage(file=img)
         self.image = tk.PhotoImage(file=image)
         self.cart = tk.Button(self.frame, text="Add to Cart", width=10,font=("Times New Roman",8), command=lambda:self.addToCart())
+        self.delete = tk.Button(self.frame, text="Delete Item", width=10,font=("Times New Roman",8), command=lambda:self.GUI.deleteMenuItemButton(self))
         self.view = tk.Button(self.frame, text="View Item", width=125,font=("Times New Roman",8), image=self.img, command=lambda:self.GUI.itemPage(self))
 
 
     def grid(self, r, c):
         self.cart.pack(side="bottom")
         self.view.pack(side="top")
+        self.delete.pack(side="bottom")
         self.frame.grid(row = r, column = c, pady = 50)
     
     def addToCart(self): # i dont think we need this, but i'll keep it just in case idk
@@ -54,6 +56,7 @@ class cafeGUI():
         self.pages = [self.menuPage, self.checkOut, self.loginCreateAccount, self.payForOrder, self.itemPage, self.orderStatus]
         self.currentItemPage = ""
 
+
         #setting 6 columns for this!
         self.root.grid_columnconfigure(0,weight=1)
         self.root.grid_columnconfigure(1,weight=1)
@@ -67,6 +70,7 @@ class cafeGUI():
         self.searchBox = tk.Entry(self.root)
 
         # widgets for menuPage
+        self.buttonMenu = tk.Button(self.root,text="Main", width=5,font=("Times New Roman",14), command=self.menuPage)
         self.buttonDrink = tk.Button(self.root,text="Drink", width=5,font=("Times New Roman",14), command=self.drinkMenuPage)
         self.buttonFood = tk.Button(self.root,text="Food", width=5,font=("Times New Roman",14), command=self.foodMenuPage)
         self.buttonOther = tk.Button(self.root,text="Other", width=5,font=("Times New Roman",14), command=self.otherMenuPage)
@@ -85,8 +89,6 @@ class cafeGUI():
         self.editsLabel = tk.Label(self.root, text="Additional Information:", width=20,font=("Times New Roman",14))
         self.textBox = tk.Text(self.root, height=10, width=20)
         self.itemToCart = tk.Button(self.root, text="Add to Cart", width=10,font=("Times New Roman",8))
-
-        #labels for all food items
         
         self.showPages(0)
 
@@ -117,8 +119,13 @@ class cafeGUI():
             if col_num == 6:
                 col_num = 0
                 row_num += 1
-    
-    
+
+        # only available to staff
+            # add menu item button
+            # update menu item button
+            # remove menu item button
+
+
         
     '''
     def removeMenuItemButton(self):
@@ -133,6 +140,8 @@ class cafeGUI():
     
     def loginCreateAccount(self): 
         self.clearPage()
+        self.username = 'qlam'
+        self.password = 00000
 
     def payForOrder(self):
         self.clearPage()
@@ -140,16 +149,21 @@ class cafeGUI():
     def itemPage(self, item):
         self.clearPage()
         self.naviBar()
+        self.buttonMenu.grid(row = 5, column = 0, pady = 6, columnspan=2, sticky="ew")
+        self.buttonDrink.grid(row = 5, column = 2, pady = 6, columnspan=2, sticky="ew")
+        self.buttonFood.grid(row = 5, column = 4, pady = 6, columnspan=2, sticky="ew")
+        self.buttonOther.grid(row = 5, column = 6, pady = 6, columnspan=2, sticky="ew")
+
         self.itemImg = tk.Label(self.root, image=item.image)
         self.costLabel = tk.Label(self.root, text="Cost: $"+str(item.price), width=20,font=("Times New Roman",14))
 
-        self.itemImg.grid(row=1,column=0, rowspan=4, pady = 10, columnspan=2)
-        self.costLabel.grid(row=1, column=3, pady = 10)
+        self.itemImg.grid(row=10,column=0, rowspan=4, pady = 10, columnspan=2)
+        self.costLabel.grid(row=10, column=3, pady = 10)
 
-        self.editsLabel.grid(row=2,column=3)
-        self.textBox.grid(row=3,column=3)
+        self.editsLabel.grid(row=11,column=3)
+        self.textBox.grid(row=12,column=3)
 
-        self.itemToCart.grid(row=4,column=3)
+        self.itemToCart.grid(row=13,column=3)
 
     def orderStatus(self):
         self.clearPage() 
@@ -164,6 +178,9 @@ class cafeGUI():
     def drinkMenuPage(self):
         self.clearPage()
         self.naviBar()
+        self.buttonMenu.grid(row = 5, column = 0, pady = 6, columnspan=2, sticky="ew")
+        self.buttonFood.grid(row = 5, column = 2, pady = 6, columnspan=2, sticky="ew")
+        self.buttonOther.grid(row = 5, column = 4, pady = 6, columnspan=2, sticky="ew")
         # fetch drink items and store them menuItemButton
         self.drinks = []
         drink_items = m.MenuItem.getDrinkMenu(self)
@@ -219,6 +236,15 @@ class cafeGUI():
             if col_num == 6:
                 col_num = 0
                 row_num += 1
+    
+    def addMenuItemButton(self):
+        x=0
 
+    def updateMenuItemButton(self):
+        x=0
+
+    def deleteMenuItemButton(self, item):
+        m.MenuItem.deleteMenuItem(self, item.name)
+        self.menuPage()
 
 cafeGUI().root.mainloop()
