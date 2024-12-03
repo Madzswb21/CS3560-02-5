@@ -133,8 +133,23 @@ class MenuItem:
     # implement this function as a delete button next to the menu item
     # only available to staff
     def deleteMenuItem(self, itemName):
-        cursor.execute("DELETE FROM MenuItem WHERE itemName = (%s)", (itemName,))
-        db.commit()
+        try:
+            # get stock number
+            cursor.execute("SELECT stock FROM MenuItem WHERE itemName = (%s)", (itemName,))
+            stock = cursor.fetchone()
+            stock = stock[0]
+
+            # only delete an item if stock is 0
+            if stock == 0:
+                cursor.execute("DELETE FROM MenuItem WHERE itemName = (%s)", (itemName,))
+                db.commit()
+                return True
+            else:
+                raise Exception(f'This item is still available, cannot be deleted.')
+        except Exception as e:
+            print(e)
+            return False
+    
 
     # function to update menu item
     # only available to staff
@@ -202,8 +217,8 @@ class MenuItem:
         return menu_name
     
     # function to fetch menuItemID by name
-    def getItemID(self):
-        cursor.execute("SELECT menuItemID from MenuItem WHERE itemName = %s", (self.itemName,))
+    def getItemID(itemName):
+        cursor.execute("SELECT menuItemID from MenuItem WHERE itemName = %s", (itemName,))
         itemID = cursor.fetchone()
         itemID = itemID[0]
         db.commit()
@@ -279,6 +294,9 @@ class Order:
             else:
                 print(f"Not enough stock for item ID {menuItemID}. Cannot complete order.")
                 return
+            
+        # delete all items in order
+
 
         db.commit()
         print("Order has been paid and stock updated.") 

@@ -161,7 +161,17 @@ UPDATE MenuItem SET image = "img\\salad.png" WHERE menuItemID = 13;
 UPDATE MenuItem SET image = "img\\muffin.png" WHERE menuItemID = 14;
 UPDATE MenuItem SET image = "img\\brownie.png" WHERE menuItemID = 15;
 
+SELECT * FROM orders;
 
+SELECT g.orderID, g.orderType, f.orderStatus, f.paymentDate, f.totalCost
+FROM orders g 
+JOIN onlineorder f
+ON g.orderID = f.onlineID
+UNION ALL
+SELECT g.orderID, g.orderType, c.orderStatus, c.paymentDate, c.totalCost
+FROM orders g
+JOIN inpersonorder c
+ON g.orderID = c.inpersonID ;
 
 
 
