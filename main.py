@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
-from tkinter import messagebox
 import Model as m
+import login as l
 
 
 '''
@@ -113,6 +113,7 @@ class cafeGUI():
         self.searchBox.grid(row = 0, column = 1, pady = 2, columnspan=2, sticky="ew")
 
     def menuPage(self):
+        self.label1.grid(row = 1, column = 0, rowspan=5, pady = 2)
         self.clearPage()
         self.naviBar()
         self.buttonDrink.grid(row = 5, column = 0, pady = 6, columnspan=2, sticky="ew")
@@ -149,17 +150,20 @@ class cafeGUI():
     
     def checkOut(self):
         self.clearPage()
+        self.label2.grid(row = 1, column = 0, rowspan=5, pady = 2)
     
     def loginCreateAccount(self): 
         self.clearPage()
-        self.username = 'qlam'
-        self.password = 00000
+        self.label3.grid(row = 1, column = 0, rowspan=5, pady = 2)
+        l.LoginPage
 
     def payForOrder(self):
         self.clearPage()
+        self.label4.grid(row = 1, column = 0, rowspan=5, pady = 2)
 
     def itemPage(self, item):
         self.clearPage()
+        self.label5.grid(row = 1, column = 0, rowspan=5, pady = 2)
         self.naviBar()
         self.buttonMenu.grid(row = 5, column = 0, pady = 6, columnspan=2, sticky="ew")
         self.buttonDrink.grid(row = 5, column = 2, pady = 6, columnspan=2, sticky="ew")

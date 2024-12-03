@@ -1,6 +1,7 @@
 # login/ Create Account Page
 import tkinter as tk
 from tkinter import messagebox
+import Model as m
 
 class LoginPage:
     def __init__(self, GUI):
@@ -37,9 +38,12 @@ class LoginPage:
         # Login logic here
         username = self.username_entry.get()
         password = self.password_entry.get()
+
+        m.Customer.username = username
+        m.Customer.password = password
         
         # For now, just a basic check (replace this with actual authentication logic)
-        if username == "admin" and password == "password":
+        if m.Customer.login:
             messagebox.showinfo("Login", "Login Successful!")
             self.GUI.showPages(1)  # Navigate to the next page (e.g., menuPage)
         else:
