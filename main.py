@@ -87,6 +87,13 @@ class cafeGUI():
         for name, description, price, stock, calories, category, image in menu_items:
             self.items.append(menuItemButton(self, name, description, price, stock, calories, category, "images\images.png", image))
 
+        # labels for testing purposes
+        self.label1 = tk.Label(self.root, text="menuPage", font=tkFont.Font(family="Times New Roman", size=12))
+        self.label2 = tk.Label(self.root, text="checkOut", font=tkFont.Font(family="Times New Roman", size=12))
+        self.label3 = tk.Label(self.root, text="loginCreateAccount", font=tkFont.Font(family="Times New Roman", size=12))
+        self.label4 = tk.Label(self.root, text="payForOrder", font=tkFont.Font(family="Times New Roman", size=12))
+        self.label5 = tk.Label(self.root, text="itemPage", font=tkFont.Font(family="Times New Roman", size=12))
+        self.label6 = tk.Label(self.root, text="orderStatus", font=tkFont.Font(family="Times New Roman", size=12))
 
         # widgets for itemPage
         self.itemImg = ""
