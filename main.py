@@ -1,7 +1,10 @@
 import tkinter as tk
+import tkinter.font as tkFont
 from tkinter import ttk
+from tkinter import messagebox
 import Model as m
 import login as l
+
 
 
 '''
@@ -75,6 +78,7 @@ class cafeGUI():
         self.searchBox = tk.Entry(self.root)
 
         # widgets for menuPage
+        self.buttonLogin = tk.Button(self.root,text="Login", width=2,font=("Times New Roman",14), command=self.loginCreateAccount)
         self.buttonMenu = tk.Button(self.root,text="Main", width=5,font=("Times New Roman",14), command=self.menuPage)
         self.buttonDrink = tk.Button(self.root,text="Drink", width=5,font=("Times New Roman",14), command=self.drinkMenuPage)
         self.buttonFood = tk.Button(self.root,text="Food", width=5,font=("Times New Roman",14), command=self.foodMenuPage)
@@ -116,6 +120,7 @@ class cafeGUI():
         self.label1.grid(row = 1, column = 0, rowspan=5, pady = 2)
         self.clearPage()
         self.naviBar()
+        self.buttonLogin.grid(row=3, column = 8, pady = 6)
         self.buttonDrink.grid(row = 5, column = 0, pady = 6, columnspan=2, sticky="ew")
         self.buttonFood.grid(row = 5, column = 2, pady = 6, columnspan=2, sticky="ew")
         self.buttonOther.grid(row = 5, column = 4, pady = 6, columnspan=2, sticky="ew")
@@ -154,8 +159,7 @@ class cafeGUI():
     
     def loginCreateAccount(self): 
         self.clearPage()
-        self.label3.grid(row = 1, column = 0, rowspan=5, pady = 2)
-        l.LoginPage
+        self.loginaccount = l.LoginPage(self)
 
     def payForOrder(self):
         self.clearPage()
