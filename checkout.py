@@ -1,7 +1,7 @@
 # checkout.py
-# checkout.py
 import tkinter as tk
 from tkinter import messagebox
+from tkinter import ttk
 
 class CheckoutPage:
     def __init__(self, GUI):
@@ -87,7 +87,74 @@ class CheckoutPage:
                     self.listbox.insert(tk.END, f"{self.items[0][0]} - ${self.items[0][2]:.2f}")
 
     def continue_shopping(self):
-        self.GUI.showPages(1)  # Go back to menuPage
+            # Create a pop-up window
+            shopping_window = tk.Toplevel(self.root)
+            shopping_window.title("Continue Shopping")
+            shopping_window.geometry("400x300")
+    
+            # Combobox for items
+            tk.Label(shopping_window, text="Select Item:").pack(pady=5)
+            item_var = tk.StringVar()
+            item_combobox = ttk.Combobox(
+            shopping_window, 
+            textvariable=item_var, 
+            values=[item[0] for item in self.items], 
+            state="readonly"
+        )
+            item_combobox.pack(pady=5)
+    
+            # Quantity Spinbox
+            tk.Label(shopping_window, text="Select Quantity:").pack(pady=5)
+            quantity_var = tk.IntVar(value=1)
+            quantity_spinbox = tk.Spinbox(
+            shopping_window, 
+            from_=1, 
+            to=100, 
+            textvariable=quantity_var, 
+            width=5
+        )
+            quantity_spinbox.pack(pady=5)
+    
+           # Details Text Area
+            tk.Label(shopping_window, text="Item Details:").pack(pady=5)
+            details_text = tk.Text(shopping_window, height=5, width=40, state="disabled")
+            details_text.pack(pady=5)
+    
+            def update_details(*args):
+                 selected_item = item_var.get()
+                 for item in self.items:
+                  if item[0] == selected_item:
+                   details_text.config(state="normal")
+                   details_text.delete("1.0", tk.END)
+                   details_text.insert(tk.END, item[1])
+                   details_text.config(state="disabled")
+                   break
+    
+            # Update details when an item is selected
+            item_combobox.bind("<<ComboboxSelected>>", update_details)
+    
+            # Add Item Button
+            def add_item():
+                selected_item = item_var.get()
+                quantity = quantity_var.get()
+                if not selected_item:
+                    messagebox.showerror("Error", "Please select an item.")
+                    return
+        
+                for item in self.items:
+                    if item[0] == selected_item:
+                       # Add the item back to the listbox
+                       self.listbox.insert(tk.END, f"{item[0]} x{quantity} - ${item[2] * quantity:.2f}")
+                
+                       # Update the total price
+                       self.update_total()
+                    
+        
+                shopping_window.destroy()
+                return
+    
+            tk.Button(shopping_window, text="Add Item", command=add_item).pack(pady=10)
+            
 
     def checkout(self):
         if not self.items:
