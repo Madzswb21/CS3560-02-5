@@ -13,29 +13,62 @@ class newItem:
         # Item Name
         self.label_item_name = tk.Label(self.frame, text="Item Name:", font=("Arial", 10))
         self.label_item_name.pack(anchor=tk.W, pady=5)
-        self.entry_item_name = tk.Entry(self.frame, font=("Arial", 10), width=30)
+        self.entry_item_name = tk.Entry(self.frame, font=("Arial", 10), width=25)
         self.entry_item_name.pack(pady=5)
 
         # Item Type
         self.label_item_type = tk.Label(self.frame, text="Item Type:", font=("Arial", 10))
         self.label_item_type.pack(anchor=tk.W, pady=5)
         self.combo_item_type = tk.StringVar()
-        self.dropdown_item_type = tk.OptionMenu(self.frame, self.combo_item_type, "Hot Drink", "Iced Drink", "Food")
+        self.dropdown_item_type = tk.OptionMenu(self.frame, self.combo_item_type, "Drink", "Food", "Other")
         self.dropdown_item_type.pack(pady=5)
 
-        # Ingredients
-        self.label_ingredients = tk.Label(self.frame, text="Ingredients (Details):", font=("Arial", 10))
+        # Details 
+        self.label_ingredients = tk.Label(self.frame, text="Description (Ingredients):", font=("Arial", 10))
         self.label_ingredients.pack(anchor=tk.W, pady=5)
-        self.text_ingredients = tk.Text(self.frame, font=("Arial", 10), height=5, width=40)
+        self.text_ingredients = tk.Text(self.frame, font=("Arial", 10), height=4, width=25)
         self.text_ingredients.pack(pady=5)
+
+        # Price
+        self.label_price = tk.Label(self.frame, text="Price ($):", font=("Arial", 10))
+        self.label_price.pack(anchor=tk.W, pady=5)
+        self.entry_price = tk.Entry(self.frame, font=("Arial", 10), width=25)
+        self.entry_price.pack(pady=5)
+
+        # Stock
+        self.label_stock = tk.Label(self.frame, text="Stock Quantity:", font=("Arial", 10))
+        self.label_stock.pack(anchor=tk.W, pady=5)
+        self.entry_stock = tk.Entry(self.frame, font=("Arial", 10), width=25)
+        self.entry_stock.pack(pady=5)
+
+        # Calories
+        self.label_calories = tk.Label(self.frame, text="Calories:", font=("Arial", 10))
+        self.label_calories.pack(anchor=tk.W, pady=5)
+        self.entry_calories = tk.Entry(self.frame, font=("Arial", 10), width=25)
+        self.entry_calories.pack(pady=5)
+
+        # Image Path
+        self.label_image_path = tk.Label(self.frame, text="Image File Path:", font=("Arial", 10))
+        self.label_image_path.pack(anchor=tk.W, pady=5)
+        self.entry_image_path = tk.Entry(self.frame, font=("Arial", 10), width=40)
+        self.entry_image_path.pack(pady=5)
 
         # Submit Button
         self.button_submit = tk.Button(self.frame, text="Add Item", font=("Arial", 12), bg="#4CAF50", fg="white", command=self.submit_item)
         self.button_submit.pack(pady=10)
 
     def submit_item(self):
-        """Placeholder for the Add Item action."""
-        print("Submit button clicked!")  # Replace this with functionality later
+        """Collect and print item data for now (can be connected to backend later)."""
+        item_data = {
+            "Name": self.entry_item_name.get(),
+            "Type": self.combo_item_type.get(),
+            "Ingredients": self.text_ingredients.get("1.0", tk.END).strip(),
+            "Price": self.entry_price.get(),
+            "Stock": self.entry_stock.get(),
+            "Calories": self.entry_calories.get(),
+            "Image Path": self.entry_image_path.get(),
+        }
+        print("Item Submitted:", item_data)
 
 
 class GUI:
@@ -44,13 +77,8 @@ class GUI:
         self.root = tk.Tk()
         self.root.title("Test Create New Item Page")
 
-        # Set window size
-        self.root.geometry("400x450")
-
-        # Initialize the CreateNewItemPage
+        self.root.geometry("450x650")
         self.create_item_page = newItem(self)
-
-        # Start the Tkinter main loop
         self.root.mainloop()
 
 
