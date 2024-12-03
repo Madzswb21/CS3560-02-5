@@ -1,4 +1,6 @@
 import tkinter as tk
+from tkinter import messagebox
+import Model as m
 
 class newItem:
     def __init__(self, parent):
@@ -59,18 +61,37 @@ class newItem:
 
     def submit_item(self):
         """Collect and print item data for now (can be connected to backend later)."""
-        item_data = {
-            "Name": self.entry_item_name.get(),
-            "Type": self.combo_item_type.get(),
-            "Ingredients": self.text_ingredients.get("1.0", tk.END).strip(),
-            "Price": self.entry_price.get(),
-            "Stock": self.entry_stock.get(),
-            "Calories": self.entry_calories.get(),
-            "Image Path": self.entry_image_path.get(),
-        }
-        print("Item Submitted:", item_data)
+        item_data = [
+            self.entry_item_name.get(),
+            self.combo_item_type.get(),
+            self.text_ingredients.get("1.0", tk.END).strip(),
+            self.entry_price.get(),
+            self.entry_stock.get(),
+            self.entry_calories.get(),
+            self.entry_image_path.get(),
+        ]
+        #return item_data
+        
+        menuitem = m.MenuItem('name', 'desc', 5, 5, 100, 'food', 'img.png')
 
+        try:
+            menuitem.name = item_data[0]
+            menuitem.category = item_data[1]
+            menuitem.description = item_data[2]
+            menuitem.price = item_data[3]
+            menuitem.stock = item_data[4]
+            menuitem.calories = item_data[5]
+            menuitem.image = item_data[6]
 
+            menuitem.createMenuItem()
+            print("Item Submitted:", item_data)
+            messagebox.showinfo("Success", "Item is successfully added!")
+            self.parent.menuPage() # need to test this
+        except:
+            messagebox.showerror("Error", "Fail to add item")
+    
+
+'''
 class GUI:
     def __init__(self):
         """Main application window."""
@@ -85,3 +106,4 @@ class GUI:
 # Run the test
 if __name__ == "__main__":
     test_gui = GUI()
+    '''

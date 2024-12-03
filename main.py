@@ -4,6 +4,7 @@ from tkinter import ttk
 from tkinter import messagebox
 import Model as m
 import login as l
+import newItem as new
 
 
 
@@ -78,6 +79,7 @@ class cafeGUI():
         self.searchBox = tk.Entry(self.root)
 
         # widgets for menuPage
+        self.buttonAdd = tk.Button(self.root,text="Add", width=2,font=("Times New Roman",14), command=self.addMenuItemButton)
         self.buttonLogin = tk.Button(self.root,text="Login", width=2,font=("Times New Roman",14), command=self.loginCreateAccount)
         self.buttonMenu = tk.Button(self.root,text="Main", width=5,font=("Times New Roman",14), command=self.menuPage)
         self.buttonDrink = tk.Button(self.root,text="Drink", width=5,font=("Times New Roman",14), command=self.drinkMenuPage)
@@ -121,6 +123,7 @@ class cafeGUI():
         self.clearPage()
         self.naviBar()
         self.buttonLogin.grid(row=3, column = 8, pady = 6)
+        self.buttonAdd.grid(row=3, column=7, pady=6)
         self.buttonDrink.grid(row = 5, column = 0, pady = 6, columnspan=2, sticky="ew")
         self.buttonFood.grid(row = 5, column = 2, pady = 6, columnspan=2, sticky="ew")
         self.buttonOther.grid(row = 5, column = 4, pady = 6, columnspan=2, sticky="ew")
@@ -263,9 +266,12 @@ class cafeGUI():
                 col_num = 0
                 row_num += 1
     
+    
     def addMenuItemButton(self):
-        x=0
-
+        self.clearPage()
+        new.newItem(self)
+        self.menuPage()
+        
     
     def updateMenuItemButton(self, item):
         self.clearPage()

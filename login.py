@@ -34,8 +34,10 @@ class LoginPage:
         self.root.grid_rowconfigure(1, weight=1)  
         self.root.grid_rowconfigure(2, weight=1)  
 
+
     def login(self):
         # Login logic here
+        '''
         username = self.username_entry.get()
         password = self.password_entry.get()
 
@@ -48,3 +50,25 @@ class LoginPage:
             self.GUI.showPages(1)  # Navigate to the next page (e.g., menuPage)
         else:
             messagebox.showerror("Error", "Invalid username or password")
+            '''
+        # Get user inputs
+        username = self.username_entry.get()
+        password = self.password_entry.get()
+
+        # Set username and password in the Customer model
+        customer = m.Customer('qlam', '123456', 'Quynh', 'Lam', 'qlam@cpp.edu', '111-222-3333', '1000 Main St.')
+        customer.username = username
+        customer.password = password
+
+        # Attempt to log in and get the customer ID
+        custID = customer.login()
+
+        if custID:  # If login is successful (custID is not None)
+            messagebox.showinfo("Login", "Login Successful!")
+            self.GUI.menuPage()  # Navigate to the next page
+        else:  # If login fails
+            messagebox.showerror("Error", "Invalid username or password")
+
+'''
+need to test this again for hashed password
+'''
