@@ -74,6 +74,8 @@ class LoginPage:
         else:  # If login fails
             messagebox.showerror("Error", "Invalid username or password")
 
+        global current_customer
+        current_customer = custID
         self.GUI.customerLoginStatus = True
 
     def loginStaff(self):

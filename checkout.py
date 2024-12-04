@@ -30,17 +30,17 @@ class CheckoutPage:
 
         global current_order
         # create order first
-        if login.current_customer:
+        if login.current_customer is not None and login.current_staff is None:
             onlineorder = m.OnlineOrder(10000, 'none', '1/1/2000', 'none', '5.00', '12:00')
-            custID = login.current_customer
+            userID = login.current_customer
             #print(custID)
-            onlineorder.createOnlineOrder(custID)
+            onlineorder.createOnlineOrder(userID)
             current_order = onlineorder.onlineID
         else:
             inpersonorder = m.InPersonOrder(10000, 'none', '1/1/2000', 'none', '5.00', '12:00')
-            staffID = login.current_staff
+            userID = login.current_staff
             #print(staffID)
-            inpersonorder.createInPersonOrder(staffID)
+            inpersonorder.createInPersonOrder(userID)
             current_order = inpersonorder.inPersonID
         
         
@@ -116,11 +116,11 @@ class CheckoutPage:
                 #self.listbox.insert(tk.END, f"{item[0]} - ${item[2]:.2f}")
 
             # get menu item ID from name
-            #self.menu.name = selected_item[0]
+            # self.menu.name = selected_item[0]
             #itemID = self.menu.getItemID()
 
             # remove the item to itemsinorder table
-            #item_in_order = m.ItemsInOrder(1, 'none')
+            # item_in_order = m.ItemsInOrder(1, 'none')
             #self.item_in_order.removeItemsFromOrder(itemID, current_order)
             #print(itemID,current_order)
 

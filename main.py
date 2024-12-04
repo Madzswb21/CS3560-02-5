@@ -80,9 +80,9 @@ class cafeGUI():
         self.buttonPayment = tk.Button(self.root,text="Pay", width=10,font=("Times New Roman",14), command=self.payForOrder)
         self.buttonCheckout = tk.Button(self.root,text="Checkout", width=10,font=("Times New Roman",14), command=self.checkOut)
         self.buttonCheckOrders = tk.Button(self.root,text="Check Orders", width=10,font=("Times New Roman",14), command=self.orderStatus)
-        if self.staffLoginStatus and not self.customerLoginStatus: 
-            self.buttonStaffView = tk.Button(self.root,text="Staff Order View", width=15,font=("Times New Roman",14), command=self.treeView)
-            self.buttonAdd = tk.Button(self.root, width = 7, height = 1, text="Add", font=("Times New Roman",14), command=self.addMenuItemButton)
+         
+        self.buttonStaffView = tk.Button(self.root,text="Staff Order View", width=15,font=("Times New Roman",14), command=self.treeView)
+        self.buttonAdd = tk.Button(self.root, width = 7, height = 1, text="Add", font=("Times New Roman",14), command=self.addMenuItemButton)
         
         # all menu item fetched and stored in menuItemButton
         self.items = []
@@ -107,10 +107,9 @@ class cafeGUI():
         self.buttonLogin.grid(row=0, column = 0, pady = 6)
         self.buttonPayment.grid(row=0, column=2, pady=6)
         self.buttonCheckout.grid(row=0, column=3, pady=6)
-        self.buttonCheckOrders.grid(row=0, column=4, pady=6)
-        if self.staffLoginStatus and not self.customerLoginStatus: 
-            self.buttonAdd.grid(row=0, column=1, pady=6)
-            self.buttonStaffView.grid(row=0, column=5, pady=6)
+        self.buttonCheckOrders.grid(row=0, column=4, pady=6) 
+        self.buttonAdd.grid(row=0, column=1, pady=6)
+        self.buttonStaffView.grid(row=0, column=5, pady=6)
 
     def menuPage(self):
         self.clearPage()

@@ -89,7 +89,7 @@ class PayForOrderPage:
         result = order.payOrder()
         
         messagebox.showinfo("Success", result)
-        self.parent.menuPage()
+        self.go_to_main()
         
 
         

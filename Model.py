@@ -12,7 +12,7 @@ import hashlib
 db = mysql.connector.connect(
     host = "localhost",
     user = "root", 
-    password = "stella96",
+    password = "yomama",
     database = "caferestaurant"
 )
 
@@ -30,7 +30,7 @@ class Customer:
         self.phoneNumber = phoneNumber
         self.physAddress = physAddress
 
-    '''
+    
     @property
     def password(self):
         return self.__password
@@ -38,7 +38,7 @@ class Customer:
     @password.setter
     def password(self, value):
         self.__password = hashlib.sha256(value.encode()).hexdigest()
-        '''
+    
 
     # create a customer account
     def createCustomer(self):
@@ -48,16 +48,7 @@ class Customer:
         print("The customer has been created!")
 
     # function to check log in
-    def login(self):
-        '''
-        cursor.execute("SELECT custID FROM Customer WHERE username = %s AND pass = %s", (self.username, self.password))
-        custID = cursor.fetchone()
-        custID = custID[0]
-        if custID:
-            return custID
-        else:
-            print("Login error!")  
-            '''
+    def login(self):  
 
         try:
             #Execute the SQL query
@@ -87,7 +78,7 @@ class Staff:
         self.phoneNumber = phoneNumber
         self.staffRole = staffRole
 
-    '''
+    
     @property
     def password(self):
         return self.__password
@@ -95,7 +86,7 @@ class Staff:
     @password.setter
     def password(self, value):
         self.__password = hashlib.sha256(value.encode()).hexdigest()
-        '''
+    
 
     # create a staff account
     def createStaff(self):
@@ -123,13 +114,7 @@ class Staff:
             print(f"An error occurred during login: {e}")
             return None
         
-        cursor.execute("SELECT staffID FROM Staff WHERE username = %s AND pass = %s", (self.username, self.password))
-        staffID = cursor.fetchone()
-        staffID = staffID[0]
-        if staffID:
-            return staffID
-        else:
-            print("Login error!") 
+
 
 
 
@@ -547,43 +532,16 @@ class ItemsInOrder:
         return quantity
 
 
+# testing area :)
 
 
-menuitem = MenuItem('name', 'desc', 5, 5, 100, 'food', 'img.png')
-#menuitem.createMenuItem()
+'''
+demo customer
+customer = Customer('jmama', '22222' , 'Joe', 'Mama', 'jm@email.com', '555-555-5555', '555 Some St.')
+customer.createCustomer()
 
-#menuitem.getMenuItems()
-customer = Customer('qlam', '123456', 'Quynh', 'Lam', 'qlam@cpp.edu', '111-222-3333', '1000 Main St.')
+demo staff
+staff = Staff('staff', '1234', "Jane", "Doe", "jd@email.com", '222-222-2222', '222 Some St.')
+staff.createStaff()
+'''
 
-#custID = customer.login()
-#print(custID)
-#customer.createCustomer()
-
-staff = Staff('qlam', '123456', 'Quynh', 'Lam', 'qlam@cpp.edu', '111-222-3333', 'server')
-#staff.createStaff()
-#staffID = staff.login()
-
-order = Order(10000, 'online')
-
-onlineorder = OnlineOrder (10000, 'none', '1/1/2000', 'none', '5.00', '12:00')
-
-#onlineorder.createOnlineOrder(custID)
-
-#onlineorder.removeOnlineOrder(61890)
-
-inpersonorder = InPersonOrder(10000, 'none', '1/1/2000', 'none', 5.00, 12)
-#inpersonorder.createInPersonOrder(staffID)
-#inpersonorder.removeInPersonOrder(32627)    
-
-
-iteminorder = ItemsInOrder(1, 'none')
-#iteminorder.addItemsToOrder(4, 89815)
-#iteminorder.removeItemsFromOrder(4, 61890)
-#iteminorder.addItemsToOrder(4, 32627)
-#iteminorder.removeItemsFromOrder(4, 32627)
-
-
-#order.orderID = 89815
-#order.checkOrderStatus()
-#order.payOrder()
-#order.updateOrderStatus(1002)
