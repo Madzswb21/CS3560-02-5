@@ -4,7 +4,7 @@ import re
 
 
 class PayForOrderPage:
-    def __init__(self, parent):
+    def __init__(self, parent,go_to_main):
         """Initialize the Pay for Order page."""
         self.frame = tk.Frame(parent.root)
         self.frame.pack(fill=tk.BOTH, expand=True, padx=20, pady=20)
@@ -79,6 +79,7 @@ class PayForOrderPage:
 
         # If all validations pass
         messagebox.showinfo("Success", "Payment details submitted successfully!")
+        self.go_to_main()  # Go back to the main page after successful submission
 
     def pickup_action(self):
         """Handle Pickup selection."""
