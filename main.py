@@ -5,6 +5,7 @@ from tkinter import messagebox
 import Model as m
 import login as l
 import newItem as new
+import checkout as ch
 
 
 
@@ -79,8 +80,9 @@ class cafeGUI():
         self.searchBox = tk.Entry(self.root)
 
         # widgets for menuPage
-        self.buttonAdd = tk.Button(self.root,text="Add", width=2,font=("Times New Roman",14), command=self.addMenuItemButton)
-        self.buttonLogin = tk.Button(self.root,text="Login", width=2,font=("Times New Roman",14), command=self.loginCreateAccount)
+        self.buttonOrder = tk.Button(self.root, width = 7, height = 1, text="Order", font=("Times New Roman",12), command=self.checkOut)
+        self.buttonAdd = tk.Button(self.root, width = 7, height = 1, text="Add", font=("Times New Roman",12), command=self.addMenuItemButton)
+        self.buttonLogin = tk.Button(self.root,text="Login", width=7, height = 1,font=("Times New Roman",12), command=self.loginCreateAccount)
         self.buttonMenu = tk.Button(self.root,text="Main", width=5,font=("Times New Roman",14), command=self.menuPage)
         self.buttonDrink = tk.Button(self.root,text="Drink", width=5,font=("Times New Roman",14), command=self.drinkMenuPage)
         self.buttonFood = tk.Button(self.root,text="Food", width=5,font=("Times New Roman",14), command=self.foodMenuPage)
@@ -122,8 +124,9 @@ class cafeGUI():
         self.label1.grid(row = 1, column = 0, rowspan=5, pady = 2)
         self.clearPage()
         self.naviBar()
-        self.buttonLogin.grid(row=3, column = 8, pady = 6)
-        self.buttonAdd.grid(row=3, column=7, pady=6)
+        self.buttonOrder.grid(row=2, column = 6, pady = 6, padx = 6)
+        self.buttonLogin.grid(row=2, column = 8, pady = 6, padx = 6)
+        self.buttonAdd.grid(row=2, column=5, pady=6, padx = 6)
         self.buttonDrink.grid(row = 5, column = 0, pady = 6, columnspan=2, sticky="ew")
         self.buttonFood.grid(row = 5, column = 2, pady = 6, columnspan=2, sticky="ew")
         self.buttonOther.grid(row = 5, column = 4, pady = 6, columnspan=2, sticky="ew")
@@ -158,11 +161,12 @@ class cafeGUI():
     
     def checkOut(self):
         self.clearPage()
-        self.label2.grid(row = 1, column = 0, rowspan=5, pady = 2)
+        ch.CheckoutPage(self)
+
     
     def loginCreateAccount(self): 
         self.clearPage()
-        self.loginaccount = l.LoginPage(self)
+        l.LoginPage(self)
 
     def payForOrder(self):
         self.clearPage()

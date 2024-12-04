@@ -87,6 +87,7 @@ class Staff:
         self.phoneNumber = phoneNumber
         self.staffRole = staffRole
 
+    '''
     @property
     def password(self):
         return self.__password
@@ -94,6 +95,7 @@ class Staff:
     @password.setter
     def password(self, value):
         self.__password = hashlib.sha256(value.encode()).hexdigest()
+        '''
 
     # create a staff account
     def createStaff(self):
@@ -104,6 +106,23 @@ class Staff:
 
     # function to check log in
     def login(self):
+        try:
+            #Execute the SQL query
+            cursor.execute("SELECT staffID FROM Staff WHERE username = %s AND pass = %s", (self.username, self.password))
+            result = cursor.fetchone()
+
+            #Check if the result is not None
+            if result:
+                staffID = result[0]
+                print("Login successful!")
+                return staffID  # Return the customer ID upon successful login
+            else:
+                print("Invalid username or password.")
+                return None
+        except Exception as e:
+            print(f"An error occurred during login: {e}")
+            return None
+        
         cursor.execute("SELECT staffID FROM Staff WHERE username = %s AND pass = %s", (self.username, self.password))
         staffID = cursor.fetchone()
         staffID = staffID[0]
@@ -233,14 +252,14 @@ class MenuItem:
     
     # function to fetch all menu names
     def getMenuName(self):
-        cursor.execute("SELECT itemName from MenuItem")
+        cursor.execute("SELECT itemName, itemDesc, itemPrice from MenuItem")
         menu_name = cursor.fetchall()
         db.commit()
         return menu_name
     
     # function to fetch menuItemID by name
-    def getItemID(itemName):
-        cursor.execute("SELECT menuItemID from MenuItem WHERE itemName = %s", (itemName,))
+    def getItemID(self):
+        cursor.execute("SELECT menuItemID from MenuItem WHERE itemName = %s", (self.name,))
         itemID = cursor.fetchone()
         itemID = itemID[0]
         db.commit()

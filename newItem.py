@@ -89,6 +89,7 @@ class newItem:
             self.parent.menuPage() # need to test this
         except:
             messagebox.showerror("Error", "Fail to add item")
+            self.parent.menuPage()
     
 
 '''
