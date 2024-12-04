@@ -13,7 +13,8 @@ db = mysql.connector.connect(
     host = "localhost",
     user = "root", 
     password = "stella96",
-    database = "caferestaurant"
+    database = "caferestaurant", 
+    auth_plugin='mysql_native_password' #feel free to delete if it causes errors for you
 )
 
 # acts as the "connection" to the database, used to write queries back to db
@@ -30,7 +31,6 @@ class Customer:
         self.phoneNumber = phoneNumber
         self.physAddress = physAddress
 
-    '''
     @property
     def password(self):
         return self.__password
@@ -38,7 +38,6 @@ class Customer:
     @password.setter
     def password(self, value):
         self.__password = hashlib.sha256(value.encode()).hexdigest()
-        '''
 
     # create a customer account
     def createCustomer(self):
@@ -49,33 +48,13 @@ class Customer:
 
     # function to check log in
     def login(self):
-        '''
         cursor.execute("SELECT custID FROM Customer WHERE username = %s AND pass = %s", (self.username, self.password))
         custID = cursor.fetchone()
         custID = custID[0]
         if custID:
             return custID
         else:
-            print("Login error!")  
-            '''
-
-        try:
-            #Execute the SQL query
-            cursor.execute("SELECT custID FROM Customer WHERE username = %s AND pass = %s", (self.username, self.password))
-            result = cursor.fetchone()
-
-            #Check if the result is not None
-            if result:
-                custID = result[0]
-                print("Login successful!")
-                return custID  # Return the customer ID upon successful login
-            else:
-                print("Invalid username or password.")
-                return None
-        except Exception as e:
-            print(f"An error occurred during login: {e}")
-            return None 
-  
+            print("Login error!")    
 
 class Staff:
     def __init__(self, username, password, fName, lName, emailAddress, phoneNumber, staffRole):
