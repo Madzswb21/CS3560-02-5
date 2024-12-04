@@ -87,11 +87,12 @@ class PayForOrderPage:
         order = m.Order(10000, 'online')
         order.orderID = ch.current_order
         result = order.payOrder()
+        
+        messagebox.showinfo("Success", result)
+        self.parent.menuPage()
+        
 
-        if result == "Payment successful!":
-            messagebox.showinfo("Success", result)
-        else:
-            messagebox.showerror("Error", result)
+        
 
 
 

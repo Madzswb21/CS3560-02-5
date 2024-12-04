@@ -1,5 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
+import Model as m
+import checkout as ck
 
 class OrderStatusApp:
     def __init__(self, root, orderID):
@@ -14,6 +16,7 @@ class OrderStatusApp:
         # Order ID label 
         self.orderID_label = tk.Label(self.root, text=f"Order ID: {orderID}", font=("Arial", 12))
         self.orderID_label.pack(pady=5)
+        self.orderID = ck.current_order
 
         # Connected Progress Bar
         self.canvas = tk.Canvas(self.root, width=500, height=120)

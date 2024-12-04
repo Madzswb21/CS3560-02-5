@@ -234,4 +234,5 @@ class CheckoutPage:
             messagebox.showerror("Error", "Cannot checkout with no items.")
             return
         messagebox.showinfo("Checkout", "Proceeding to payment...")
+        self.GUI.clearPage()
         self.GUI.payForOrder()
