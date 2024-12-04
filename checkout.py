@@ -2,25 +2,60 @@
 import tkinter as tk
 from tkinter import messagebox
 from tkinter import ttk
+import Model as m
+import login
+
+current_order = None
 
 class CheckoutPage:
     def __init__(self, GUI):
         self.GUI = GUI
         self.root = GUI.root
         
+        '''
         # dummy Item List
         self.items = [("Item 1", "Details: milk, coffe beans, black ink, sorrows of the soul", 10.99), 
                       ("Item 2", "Details 2", 5.49), 
                       ("Item 3", "Details 3", 8.99)]
+                      '''
         
+        self.item_in_order = m.ItemsInOrder(1, 'none')
+
+        # fetch all menu items from databse to put in combobox
+        self.menu = m.MenuItem('name', 'desc', 5, 5, 100, 'food', 'img.png')
+        self.menu_items = self.menu.getMenuName()
+                   
+        
+        order = m.Order(10000, 'online')
+
+        global current_order
+        # create order first
+        if login.current_customer:
+            onlineorder = m.OnlineOrder(10000, 'none', '1/1/2000', 'none', '5.00', '12:00')
+            custID = login.current_customer
+            #print(custID)
+            onlineorder.createOnlineOrder(custID)
+            current_order = onlineorder.onlineID
+        else:
+            inpersonorder = m.InPersonOrder(10000, 'none', '1/1/2000', 'none', '5.00', '12:00')
+            staffID = login.current_staff
+            #print(staffID)
+            inpersonorder.createInPersonOrder(staffID)
+            current_order = inpersonorder.inpersonID
+        
+        
+        
+
         # frame
         self.frame = tk.Frame(self.root)
         self.frame.pack(pady=10, padx=10)
         
         # Listbox for items
         self.listbox = tk.Listbox(self.frame, selectmode="extended", height=10, width=30)
-        for item in self.items:
+        '''
+        for item in self.menu_items:
             self.listbox.insert(tk.END, f"{item[0]} - ${item[2]:.2f}")
+            '''
         self.listbox.grid(row=0, column=0, rowspan=4, padx=10, pady=5)
         
         # Buttons
@@ -47,7 +82,7 @@ class CheckoutPage:
         self.update_total()
 
     def update_total(self):
-        total = sum(item[2] for item in self.items)
+        total = sum(item[2] for item in self.menu_items)
         self.total_label.config(text=f"Total: ${total:.2f}")
 
     def view_details(self):
@@ -57,7 +92,7 @@ class CheckoutPage:
             return
         
         index = selected[0]
-        item = self.items[index]
+        item = self.menu_items[index]
         messagebox.showinfo("Item Details", f"Name: {item[0]}\nDetails: {item[1]}\nPrice: ${item[2]:.2f}")
 
     def remove_items(self):
@@ -68,14 +103,24 @@ class CheckoutPage:
         
         confirm = messagebox.askyesno("Remove Items", "Are you sure you want to remove the selected items?")
         if confirm:
-            for index in reversed(selected):  # Remove from the end to avoid index shifting
-                del self.items[index]
-            
-            self.listbox.delete(0, tk.END)
-            for item in self.items:
-                self.listbox.insert(tk.END, f"{item[0]} - ${item[2]:.2f}")
+            for index in selected:  # Remove from the end to avoid index shifting
+                self.listbox.delete(index)
+
+            #for item in self.menu_items:
+                #self.listbox.insert(tk.END, f"{item[0]} - ${item[2]:.2f}")
+
+            # get menu item ID from name
+            self.menu.name = selected[0]
+            itemID = self.menu.getItemID()
+
+            # remove the item to itemsinorder table
+            #item_in_order = m.ItemsInOrder(1, 'none')
+            #self.item_in_order.removeItemsFromOrder(itemID, current_order)
+            print(itemID,current_order)
+
             self.update_total()
             
+            '''
             if not self.items:
                 quit_confirm = messagebox.askyesno(
                     "No Items Left", "All items have been removed. Do you want to return to the menu?"
@@ -85,12 +130,14 @@ class CheckoutPage:
                 else:
                     self.items.append(("Placeholder Item", "Details", 0))  # Add a placeholder to prevent empty list error
                     self.listbox.insert(tk.END, f"{self.items[0][0]} - ${self.items[0][2]:.2f}")
+            '''
 
     def continue_shopping(self):
             # Create a pop-up window
             shopping_window = tk.Toplevel(self.root)
             shopping_window.title("Continue Shopping")
             shopping_window.geometry("400x300")
+
     
             # Combobox for items
             tk.Label(shopping_window, text="Select Item:").pack(pady=5)
@@ -98,7 +145,7 @@ class CheckoutPage:
             item_combobox = ttk.Combobox(
             shopping_window, 
             textvariable=item_var, 
-            values=[item[0] for item in self.items], 
+            values=[item[0] for item in self.menu_items], 
             state="readonly"
         )
             item_combobox.pack(pady=5)
@@ -118,11 +165,11 @@ class CheckoutPage:
            # Details Text Area
             tk.Label(shopping_window, text="Item Details:").pack(pady=5)
             details_text = tk.Text(shopping_window, height=5, width=40, state="disabled")
-            details_text.pack(pady=5)
+            details_text.pack(pady=5)           
     
             def update_details(*args):
                  selected_item = item_var.get()
-                 for item in self.items:
+                 for item in self.menu_items:
                   if item[0] == selected_item:
                    details_text.config(state="normal")
                    details_text.delete("1.0", tk.END)
@@ -132,23 +179,41 @@ class CheckoutPage:
     
             # Update details when an item is selected
             item_combobox.bind("<<ComboboxSelected>>", update_details)
+
+            # Customization area 
+            tk.Label(shopping_window, text="Customization:").pack(pady=5)
+            customization_text = tk.Text(shopping_window, height=5, width=30, state="normal")
+            customization_text.pack(pady=5)
     
             # Add Item Button
             def add_item():
                 selected_item = item_var.get()
+
+                # get menu item ID from name
+                self.menu.name = selected_item
+                itemID = self.menu.getItemID()
+                
                 quantity = quantity_var.get()
+                customization = customization_text.get("1.0", tk.END).strip()
+
                 if not selected_item:
                     messagebox.showerror("Error", "Please select an item.")
                     return
         
-                for item in self.items:
+                for item in self.menu_items:
                     if item[0] == selected_item:
                        # Add the item back to the listbox
                        self.listbox.insert(tk.END, f"{item[0]} x{quantity} - ${item[2] * quantity:.2f}")
-                
                        # Update the total price
                        self.update_total()
-                    
+                      
+                       # add the item to itemsinorder table
+            
+                       self.item_in_order.quantity = quantity
+                       self.item_in_order.customization = customization
+                       self.item_in_order.addItemsToOrder(itemID, current_order)
+                       print(self.item_in_order.quantity, self.item_in_order.customization, itemID, current_order)
+                       
         
                 shopping_window.destroy()
                 return
@@ -157,7 +222,7 @@ class CheckoutPage:
             
 
     def checkout(self):
-        if not self.items:
+        if not self.item_in_order:
             messagebox.showerror("Error", "Cannot checkout with no items.")
             return
         messagebox.showinfo("Checkout", "Proceeding to payment...")
