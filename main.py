@@ -26,7 +26,6 @@ class menuItemButton (m.MenuItem):
         menuItemButton.instances.append(self)
         self.GUI = GUI
         self.frame = tk.Frame(width=125, height=125,bg="white")
-
         self.img = ImageTk.PhotoImage( Image.open(img).resize((125,125)) )
         self.image = tk.PhotoImage(file=image)
         self.delete = tk.Button(self.frame, text="Delete Item", width=10,font=("Times New Roman",8), command=lambda:self.GUI.deleteMenuItemButton(self))

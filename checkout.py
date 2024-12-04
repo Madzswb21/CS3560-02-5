@@ -106,17 +106,23 @@ class CheckoutPage:
             for index in selected:  # Remove from the end to avoid index shifting
                 self.listbox.delete(index)
 
+            print(selected[0])
+            
+            selected_item = self.listbox.get(selected)
+            print(selected_item)
+            
+
             #for item in self.menu_items:
                 #self.listbox.insert(tk.END, f"{item[0]} - ${item[2]:.2f}")
 
             # get menu item ID from name
-            self.menu.name = selected[0]
-            itemID = self.menu.getItemID()
+            #self.menu.name = selected_item[0]
+            #itemID = self.menu.getItemID()
 
             # remove the item to itemsinorder table
             #item_in_order = m.ItemsInOrder(1, 'none')
             #self.item_in_order.removeItemsFromOrder(itemID, current_order)
-            print(itemID,current_order)
+            #print(itemID,current_order)
 
             self.update_total()
             
