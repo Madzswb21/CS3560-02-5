@@ -7,10 +7,9 @@ import login as l
 import newItem as new
 import checkout as ck
 import payment as pay
+import orderStatus as os
+import treeView as tv
 from PIL import Image, ImageTk #used pip install pillow if its not working
-
-
-
 
 '''
 this class inherits MenuItem from the project skeleton, it just does formatting tkinter things!
@@ -52,7 +51,6 @@ def showPages(self, i) - makes sure I can show a certain page at a certain index
 
 def clearPage(self) - clears all the widgets in a page - run this at the beginning of each function to clear the website!
 
-
 side note: I created widgets in the __init__ but only put them into a grid in the functions for each page!
 '''
 
@@ -72,10 +70,6 @@ class cafeGUI():
         #setting 8 columns for this!
         for i in range(6):
             self.root.grid_columnconfigure(i,weight=1)
-        
-        # widgets for navigation bar (goes on every page except payForOrder i think??)
-        self.searchLabel = tk.Label(self.root, text="search")
-        self.searchBox = tk.Entry(self.root)
 
         # widgets for menuPage
         self.buttonOrder = tk.Button(self.root, width = 7, height = 1, text="Order", font=("Times New Roman",14), command=self.checkOut)
@@ -87,6 +81,8 @@ class cafeGUI():
         self.buttonOther = tk.Button(self.root,text="Other", width=10,font=("Times New Roman",14), command=self.otherMenuPage)
         self.buttonPayment = tk.Button(self.root,text="Pay", width=10,font=("Times New Roman",14), command=self.payForOrder)
         self.buttonCheckout = tk.Button(self.root,text="Checkout", width=10,font=("Times New Roman",14), command=self.checkOut)
+        self.buttonCheckOrders = tk.Button(self.root,text="Check Orders", width=10,font=("Times New Roman",14), command=self.orderStatus)
+        self.buttonStaffView = tk.Button(self.root,text="Staff Order View", width=15,font=("Times New Roman",14), command=self.treeView)
         
         # all menu item fetched and stored in menuItemButton
         self.items = []
@@ -108,12 +104,12 @@ class cafeGUI():
             i.grid_forget()
     
     def naviBar(self):
-        self.searchLabel.grid(row = 0, column = 0, pady = 2)
-        self.searchBox.grid(row = 0, column = 1, pady = 2, sticky="ew")
-        self.buttonLogin.grid(row=0, column = 2, pady = 6)
-        self.buttonAdd.grid(row=0, column=3, pady=6)
-        self.buttonPayment.grid(row=0, column=4, pady=6)
-        self.buttonCheckout.grid(row=0, column=5, pady=6)
+        self.buttonLogin.grid(row=0, column = 0, pady = 6)
+        self.buttonAdd.grid(row=0, column=1, pady=6)
+        self.buttonPayment.grid(row=0, column=2, pady=6)
+        self.buttonCheckout.grid(row=0, column=3, pady=6)
+        self.buttonCheckOrders.grid(row=0, column=4, pady=6)
+        self.buttonStaffView.grid(row=0, column=5, pady=6)
 
     def menuPage(self):
         self.clearPage()
@@ -182,10 +178,14 @@ class cafeGUI():
         self.itemToCart.grid(row=13,column=3)
 
     def orderStatus(self):
-        self.clearPage() 
-    
+        if self.customerLoginStatus and not self.staffLoginStatus:
+            self.clearPage() 
+            os.OrderStatusApp(self)
+
     def treeView(self):
-        self.clearPage() 
+        if self.customerLoginStatus and not self.staffLoginStatus:
+            self.clearPage() 
+            tv.TreeViewApp(self)
 
     def showPages(self, i): #this is the function that will show everything -> put all visual thingys here!
         self.pageIndex = i #part of me doesn't think we need this anymore? but i'm too afraid to erase it lmaoooo
