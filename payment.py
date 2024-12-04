@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter import messagebox
 import re
+import Model as m
+import checkout as ch
 
 
 class PayForOrderPage:
@@ -45,7 +47,7 @@ class PayForOrderPage:
         self.button_submit = tk.Button(self.frame, text="Submit Payment", font=("Arial", 10), bg="#4CAF50", fg="white", command=self.validate_form)
         self.button_submit.pack(pady=20)
 
-
+        '''
         # Pickup or Delivery
         self.label_delivery = tk.Label(self.frame, text="Select Pickup or Delivery:", font=("Arial", 10))
         self.label_delivery.pack(anchor=tk.W, pady=(10, 5))
@@ -53,6 +55,7 @@ class PayForOrderPage:
         self.button_delivery = tk.Button(self.frame, text="Delivery", font=("Arial", 10), bg="#2196F3", fg="white", command=self.delivery_action)
         self.button_pickup.pack(side=tk.LEFT, expand=True, pady=20, padx=10)
         self.button_delivery.pack(side=tk.RIGHT, expand=True, pady=20, padx=10)
+        '''
         
         
 
@@ -80,13 +83,15 @@ class PayForOrderPage:
         # If all validations pass
         messagebox.showinfo("Success", "Payment details submitted successfully!")
 
-    def pickup_action(self):
-        """Handle Pickup selection."""
-        print("Pickup selected!")
 
-    def delivery_action(self):
-        """Handle Delivery selection."""
-        print("Delivery selected!")
+        order = m.Order(10000, 'online')
+        order.orderID = ch.current_order
+        result = order.payOrder()
+
+        if result == "Payment successful!":
+            messagebox.showinfo("Success", result)
+        else:
+            messagebox.showerror("Error", result)
 
 
 

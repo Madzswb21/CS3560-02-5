@@ -72,7 +72,6 @@ class cafeGUI():
 
         # widgets for menuPage
         self.buttonOrder = tk.Button(self.root, width = 7, height = 1, text="Order", font=("Times New Roman",14), command=self.checkOut)
-        self.buttonAdd = tk.Button(self.root, width = 7, height = 1, text="Add", font=("Times New Roman",14), command=self.addMenuItemButton)
         self.buttonLogin = tk.Button(self.root,text="Login", width=10, height = 1,font=("Times New Roman",14), command=self.loginCreateAccount)
         self.buttonMenu = tk.Button(self.root,text="Main", width=5,font=("Times New Roman",14), command=self.menuPage)
         self.buttonDrink = tk.Button(self.root,text="Drink", width=5,font=("Times New Roman",14), command=self.drinkMenuPage)
@@ -81,7 +80,9 @@ class cafeGUI():
         self.buttonPayment = tk.Button(self.root,text="Pay", width=10,font=("Times New Roman",14), command=self.payForOrder)
         self.buttonCheckout = tk.Button(self.root,text="Checkout", width=10,font=("Times New Roman",14), command=self.checkOut)
         self.buttonCheckOrders = tk.Button(self.root,text="Check Orders", width=10,font=("Times New Roman",14), command=self.orderStatus)
-        self.buttonStaffView = tk.Button(self.root,text="Staff Order View", width=15,font=("Times New Roman",14), command=self.treeView)
+        if self.staffLoginStatus and not self.customerLoginStatus: 
+            self.buttonStaffView = tk.Button(self.root,text="Staff Order View", width=15,font=("Times New Roman",14), command=self.treeView)
+            self.buttonAdd = tk.Button(self.root, width = 7, height = 1, text="Add", font=("Times New Roman",14), command=self.addMenuItemButton)
         
         # all menu item fetched and stored in menuItemButton
         self.items = []
@@ -104,11 +105,12 @@ class cafeGUI():
     
     def naviBar(self):
         self.buttonLogin.grid(row=0, column = 0, pady = 6)
-        self.buttonAdd.grid(row=0, column=1, pady=6)
         self.buttonPayment.grid(row=0, column=2, pady=6)
         self.buttonCheckout.grid(row=0, column=3, pady=6)
         self.buttonCheckOrders.grid(row=0, column=4, pady=6)
-        self.buttonStaffView.grid(row=0, column=5, pady=6)
+        if self.staffLoginStatus and not self.customerLoginStatus: 
+            self.buttonAdd.grid(row=0, column=1, pady=6)
+            self.buttonStaffView.grid(row=0, column=5, pady=6)
 
     def menuPage(self):
         self.clearPage()
@@ -144,18 +146,16 @@ class cafeGUI():
     '''
     
     def checkOut(self):
-        if self.customerLoginStatus and not self.staffLoginStatus: 
-            self.clearPage()
-            ck.CheckoutPage(self)
+        self.clearPage()
+        ck.CheckoutPage(self)
     
     def loginCreateAccount(self): 
         self.clearPage()
         l.LoginPage(self)
 
     def payForOrder(self):
-        if self.customerLoginStatus and not self.staffLoginStatus: 
-            self.clearPage()
-            pay.PayForOrderPage(self)
+        self.clearPage()
+        pay.PayForOrderPage(self)
 
     def itemPage(self, item):
         self.clearPage()
@@ -177,14 +177,13 @@ class cafeGUI():
         self.itemToCart.grid(row=13,column=3)
 
     def orderStatus(self):
-        if self.customerLoginStatus and not self.staffLoginStatus:
-            self.clearPage() 
-            os.OrderStatusApp(self)
+    
+        self.clearPage() 
+        os.OrderStatusApp(self)
 
     def treeView(self):
-        if self.customerLoginStatus and not self.staffLoginStatus:
-            self.clearPage() 
-            tv.TreeViewApp(self)
+        self.clearPage() 
+        tv.TreeViewApp(self)
 
     def showPages(self, i): #this is the function that will show everything -> put all visual thingys here!
         self.pageIndex = i #part of me doesn't think we need this anymore? but i'm too afraid to erase it lmaoooo
@@ -264,51 +263,50 @@ class cafeGUI():
     
     
     def addMenuItemButton(self):
-        if self.staffLoginStatus and not self.customerLoginStatus: 
-            self.clearPage()
-            new.newItem(self)
-            self.menuPage()
+        self.clearPage()
+        new.newItem(self)
+        self.menuPage()
         
     
     def updateMenuItemButton(self, item):
-        if self.staffLoginStatus and not self.customerLoginStatus:
-            self.clearPage()
-            self.naviBar()
+    
+        self.clearPage()
+        self.naviBar()
 
-            # Display entry fields for updating item
-            tk.Label(self.root, text="Update Menu Item", font=("Times New Roman", 16)).grid(row=2, column=1, columnspan=2, pady=10)
+        # Display entry fields for updating item
+        tk.Label(self.root, text="Update Menu Item", font=("Times New Roman", 16)).grid(row=2, column=1, columnspan=2, pady=10)
 
-            fields = ["Name", "Description", "Price", "Stock", "Calories", "Category"]
-            current_values = [item.name, item.description, item.price, item.stock, item.calories, item.category]
-            entries = {}
+        fields = ["Name", "Description", "Price", "Stock", "Calories", "Category"]
+        current_values = [item.name, item.description, item.price, item.stock, item.calories, item.category]
+        entries = {}
 
-            
-            for i, field in enumerate(fields):
-                tk.Label(self.root, text=f"{field}:", font=("Times New Roman", 12)).grid(row=i + 5, column=0, padx=10, pady=10)
-                entry = tk.Entry(self.root, width=50, font=("Times New Roman", 12))
-                entry.insert(0, current_values[i])
-                entry.grid(row=i + 5, column=1, padx=20, pady=10)
-                entries[field.lower()] = entry
         
-            def submitUpdate():
-                updated_values = {key: entries[key].get() for key in entries}
-                try:
-                    item.name = updated_values["name"]
-                    item.description = updated_values["description"]
-                    item.price = float(updated_values["price"])
-                    item.stock = int(updated_values["stock"])
-                    item.calories = int(updated_values["calories"])
-                    item.category = updated_values["category"]
+        for i, field in enumerate(fields):
+            tk.Label(self.root, text=f"{field}:", font=("Times New Roman", 12)).grid(row=i + 5, column=0, padx=10, pady=10)
+            entry = tk.Entry(self.root, width=50, font=("Times New Roman", 12))
+            entry.insert(0, current_values[i])
+            entry.grid(row=i + 5, column=1, padx=20, pady=10)
+            entries[field.lower()] = entry
+    
+        def submitUpdate():
+            updated_values = {key: entries[key].get() for key in entries}
+            try:
+                item.name = updated_values["name"]
+                item.description = updated_values["description"]
+                item.price = float(updated_values["price"])
+                item.stock = int(updated_values["stock"])
+                item.calories = int(updated_values["calories"])
+                item.category = updated_values["category"]
 
-                    itemID = m.MenuItem.getItemID(item.name)
-                    item.updateMenuItem(itemID)  # Update in backend
-                    self.menuPage()  # Refresh menu page
-                    tk.messagebox.showinfo("Update Successful", f"'{item.name}' has been updated successfully!")
-                except Exception as e:
-                    tk.messagebox.showerror("Error", f"Failed to update item: {e}")
-            
-            tk.Button(self.root, text="Submit", font=("Times New Roman", 12), command=submitUpdate).grid(row=len(fields) + 5, column=1, pady=10)
-            tk.Button(self.root, text="Cancel", font=("Times New Roman", 12), command=self.menuPage).grid(row=len(fields) + 6, column=1, pady=10)
+                itemID = m.MenuItem.getItemID(item.name)
+                item.updateMenuItem(itemID)  # Update in backend
+                self.menuPage()  # Refresh menu page
+                tk.messagebox.showinfo("Update Successful", f"'{item.name}' has been updated successfully!")
+            except Exception as e:
+                tk.messagebox.showerror("Error", f"Failed to update item: {e}")
+        
+        tk.Button(self.root, text="Submit", font=("Times New Roman", 12), command=submitUpdate).grid(row=len(fields) + 5, column=1, pady=10)
+        tk.Button(self.root, text="Cancel", font=("Times New Roman", 12), command=self.menuPage).grid(row=len(fields) + 6, column=1, pady=10)
 
 
     def deleteMenuItemButton(self, item):
@@ -320,7 +318,7 @@ class cafeGUI():
                 tk.messagebox.showinfo("Success", f"The item '{item.name}' has been successfully deleted.")
             else:
                 tk.messagebox.showerror("Error", f"The item '{item.name} is still in stock, it cannot be deleted.")
-    
+        
 
         # all menu item fetched and stored in menuItemButton
         self.items = []
