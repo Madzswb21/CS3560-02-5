@@ -109,28 +109,5 @@ class OrderStatusApp:
         print("Creating a new order!")
 
 
-class GUI:
-    def __init__(self):
-        self.root = tk.Tk()
-        self.root.title("Order Status App")
-
-        # Automatically fetch the orderID (I used static orderID for testing)
-        # this would normally be dynamically retrieved 
-        self.orderID = 12345  #DELETE
-
-        # Initialize the OrderStatusApp automatically
-        self.order_status_app = OrderStatusApp(self.root, self.orderID)
-
-        # Start the Tkinter main loop
-        self.root.mainloop()
-
-# Run the test
-if __name__ == "__main__":
-    test_gui = GUI()
-
-
-
-
-
 
 

@@ -74,11 +74,8 @@ class LoginPage:
         else:  # If login fails
             messagebox.showerror("Error", "Invalid username or password")
 
-        global current_customer
-        current_customer = custID
+        self.GUI.customerLoginStatus = True
 
-        return custID
-    
     def loginStaff(self):
         # Login logic here
         '''
@@ -116,9 +113,9 @@ class LoginPage:
         global current_staff
         current_staff = staffID
 
-        return staffID
-    
+        self.GUI.staffLoginStatus = True
 
+        return staffID
 '''
 need to test this again for hashed password
 '''

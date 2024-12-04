@@ -5,13 +5,11 @@ from tkinter import messagebox
 import Model as m
 import login as l
 import newItem as new
-import checkout as ch
+import checkout as ck
 import payment as pay
 import orderStatus as os
 import treeView as tv
 from PIL import Image, ImageTk #used pip install pillow if its not working
-
-
 
 '''
 this class inherits MenuItem from the project skeleton, it just does formatting tkinter things!
@@ -39,8 +37,11 @@ class menuItemButton (m.MenuItem):
         self.view.pack(side="top")
         self.delete.pack(side="right")
         self.update.pack(side="left")
+
         self.frame.grid(row = r, column = c, pady = 50)
-    
+
+    #def set_controller(self, c.MenuItemController):
+        #self.controller = c.MenuItemController
 
 '''
 here is the method I used to make sure we can switch between pages!
@@ -48,7 +49,6 @@ here is the method I used to make sure we can switch between pages!
 def showPages(self, i) - makes sure I can show a certain page at a certain index of the self.pages list
 
 def clearPage(self) - clears all the widgets in a page - run this at the beginning of each function to clear the website!
-
 
 side note: I created widgets in the __init__ but only put them into a grid in the functions for each page!
 '''
@@ -60,17 +60,17 @@ class cafeGUI():
         self.root.title("Cafe Webpage") 
         
         self.pageIndex = 0
-        self.pages = [self.menuPage, self.checkOut, self.loginCreateAccount, self.payForOrder, self.itemPage, self.orderStatus]
+        self.pages = [self.menuPage, self.checkOut, self.loginCreateAccount, self.payForOrder, self.itemPage, self.orderStatus, self.treeView]
         self.currentItemPage = ""
 
+        self.staffLoginStatus = False
+        self.customerLoginStatus = False
 
         #setting 8 columns for this!
         for i in range(6):
             self.root.grid_columnconfigure(i,weight=1)
-        
 
-
-       # widgets for menuPage
+        # widgets for menuPage
         self.buttonOrder = tk.Button(self.root, width = 7, height = 1, text="Order", font=("Times New Roman",14), command=self.checkOut)
         self.buttonAdd = tk.Button(self.root, width = 7, height = 1, text="Add", font=("Times New Roman",14), command=self.addMenuItemButton)
         self.buttonLogin = tk.Button(self.root,text="Login", width=10, height = 1,font=("Times New Roman",14), command=self.loginCreateAccount)
@@ -87,8 +87,7 @@ class cafeGUI():
         self.items = []
         menu_items = m.MenuItem.getMenuItems(m.MenuItem)
         for name, description, price, stock, calories, category, image in menu_items:
-            self.items.append(menuItemButton(self, name, description, price, stock, calories, category, "images\images.png", image))
-
+            self.items.append(menuItemButton(self, name, description, price, stock, calories, category, image, image))
 
         # widgets for itemPage
         self.itemImg = ""
@@ -114,16 +113,11 @@ class cafeGUI():
     def menuPage(self):
         self.clearPage()
         self.naviBar()
-        self.buttonOrder.grid(row=2, column = 6, pady = 6, padx = 6)
-        self.buttonLogin.grid(row=2, column = 8, pady = 6, padx = 6)
-        self.buttonAdd.grid(row=2, column=5, pady=6, padx = 6)
+        
         self.buttonDrink.grid(row = 5, column = 0, pady = 6, columnspan=2, sticky="ew")
         self.buttonFood.grid(row = 5, column = 2, pady = 6, columnspan=2, sticky="ew")
         self.buttonOther.grid(row = 5, column = 4, pady = 6, columnspan=2, sticky="ew")
-        #self.buttonAdd.grid(row = )    
-
-        #self.pancakeItem.grid(8,0)
-        
+        #self.buttonAdd.grid(row = )            
         # grids of all menu items
         row_num = 8
         col_num = 0
@@ -150,22 +144,21 @@ class cafeGUI():
     '''
     
     def checkOut(self):
-        self.clearPage()
-        ch.CheckoutPage(self)
-
+        if self.customerLoginStatus and not self.staffLoginStatus: 
+            self.clearPage()
+            ck.CheckoutPage(self)
     
     def loginCreateAccount(self): 
         self.clearPage()
         l.LoginPage(self)
 
     def payForOrder(self):
-        self.clearPage()
-        self.label4.grid(row = 1, column = 0, rowspan=5, pady = 2)
-        pay.PayForOrderPage(self)
+        if self.customerLoginStatus and not self.staffLoginStatus: 
+            self.clearPage()
+            pay.PayForOrderPage(self)
 
     def itemPage(self, item):
         self.clearPage()
-        self.label5.grid(row = 1, column = 0, rowspan=5, pady = 2)
         self.naviBar()
         self.buttonMenu.grid(row = 5, column = 0, pady = 6, columnspan=2, sticky="ew")
         self.buttonDrink.grid(row = 5, column = 2, pady = 6, columnspan=2, sticky="ew")
@@ -184,8 +177,9 @@ class cafeGUI():
         self.itemToCart.grid(row=13,column=3)
 
     def orderStatus(self):
-        self.clearPage() 
-        os.OrderStatusApp(self)
+        if self.customerLoginStatus and not self.staffLoginStatus:
+            self.clearPage() 
+            os.OrderStatusApp(self)
 
     def treeView(self):
         if self.customerLoginStatus and not self.staffLoginStatus:
@@ -210,7 +204,7 @@ class cafeGUI():
         drink_items = m.MenuItem.getDrinkMenu(self)
         for name, description, price, stock, calories, category, image in drink_items:
             thumbnail = Image.open(image)
-            drinks.append(menuItemButton(self, name, description, price, stock, calories, category, "images\images.png", image))
+            drinks.append(menuItemButton(self, name, description, price, stock, calories, category, image, image))
 
         # grids of all drink items 
         row_num = 8
@@ -233,7 +227,7 @@ class cafeGUI():
         foods = []
         food_items = m.MenuItem.getFoodMenu(self)
         for name, description, price, stock, calories, category, image in food_items:
-            foods.append(menuItemButton(self, name, description, price, stock, calories, category, "images\images.png", image))
+            foods.append(menuItemButton(self, name, description, price, stock, calories, category, image, image))
 
         # grids of all food items 
         row_num = 8
@@ -256,7 +250,7 @@ class cafeGUI():
         otherItems = []
         other_items = m.MenuItem.getOtherMenu(self)
         for name, description, price, stock, calories, category, image in other_items:
-            otherItems.append(menuItemButton(self, name, description, price, stock, calories, category, "images\images.png", image))
+            otherItems.append(menuItemButton(self, name, description, price, stock, calories, category, image, image))
 
         # grids of all other items 
         row_num = 8
@@ -270,49 +264,51 @@ class cafeGUI():
     
     
     def addMenuItemButton(self):
-        self.clearPage()
-        new.newItem(self)
-        self.menuPage()
+        if self.staffLoginStatus and not self.customerLoginStatus: 
+            self.clearPage()
+            new.newItem(self)
+            self.menuPage()
         
     
     def updateMenuItemButton(self, item):
-        self.clearPage()
-        self.naviBar()
+        if self.staffLoginStatus and not self.customerLoginStatus:
+            self.clearPage()
+            self.naviBar()
 
-        # Display entry fields for updating item
-        tk.Label(self.root, text="Update Menu Item", font=("Times New Roman", 16)).grid(row=2, column=1, columnspan=2, pady=10)
+            # Display entry fields for updating item
+            tk.Label(self.root, text="Update Menu Item", font=("Times New Roman", 16)).grid(row=2, column=1, columnspan=2, pady=10)
 
-        fields = ["Name", "Description", "Price", "Stock", "Calories", "Category"]
-        current_values = [item.name, item.description, item.price, item.stock, item.calories, item.category]
-        entries = {}
+            fields = ["Name", "Description", "Price", "Stock", "Calories", "Category"]
+            current_values = [item.name, item.description, item.price, item.stock, item.calories, item.category]
+            entries = {}
 
+            
+            for i, field in enumerate(fields):
+                tk.Label(self.root, text=f"{field}:", font=("Times New Roman", 12)).grid(row=i + 5, column=0, padx=10, pady=10)
+                entry = tk.Entry(self.root, width=50, font=("Times New Roman", 12))
+                entry.insert(0, current_values[i])
+                entry.grid(row=i + 5, column=1, padx=20, pady=10)
+                entries[field.lower()] = entry
         
-        for i, field in enumerate(fields):
-            tk.Label(self.root, text=f"{field}:", font=("Times New Roman", 12)).grid(row=i + 5, column=0, padx=10, pady=10)
-            entry = tk.Entry(self.root, width=50, font=("Times New Roman", 12))
-            entry.insert(0, current_values[i])
-            entry.grid(row=i + 5, column=1, padx=20, pady=10)
-            entries[field.lower()] = entry
-    
-        def submitUpdate():
-            updated_values = {key: entries[key].get() for key in entries}
-            try:
-                item.name = updated_values["name"]
-                item.description = updated_values["description"]
-                item.price = float(updated_values["price"])
-                item.stock = int(updated_values["stock"])
-                item.calories = int(updated_values["calories"])
-                item.category = updated_values["category"]
+            def submitUpdate():
+                updated_values = {key: entries[key].get() for key in entries}
+                try:
+                    item.name = updated_values["name"]
+                    item.description = updated_values["description"]
+                    item.price = float(updated_values["price"])
+                    item.stock = int(updated_values["stock"])
+                    item.calories = int(updated_values["calories"])
+                    item.category = updated_values["category"]
 
-                itemID = m.MenuItem.getItemID(item.name)
-                item.updateMenuItem(itemID)  # Update in backend
-                self.menuPage()  # Refresh menu page
-                tk.messagebox.showinfo("Update Successful", f"'{item.name}' has been updated successfully!")
-            except Exception as e:
-                tk.messagebox.showerror("Error", f"Failed to update item: {e}")
-        
-        tk.Button(self.root, text="Submit", font=("Times New Roman", 12), command=submitUpdate).grid(row=len(fields) + 5, column=1, pady=10)
-        tk.Button(self.root, text="Cancel", font=("Times New Roman", 12), command=self.menuPage).grid(row=len(fields) + 6, column=1, pady=10)
+                    itemID = m.MenuItem.getItemID(item.name)
+                    item.updateMenuItem(itemID)  # Update in backend
+                    self.menuPage()  # Refresh menu page
+                    tk.messagebox.showinfo("Update Successful", f"'{item.name}' has been updated successfully!")
+                except Exception as e:
+                    tk.messagebox.showerror("Error", f"Failed to update item: {e}")
+            
+            tk.Button(self.root, text="Submit", font=("Times New Roman", 12), command=submitUpdate).grid(row=len(fields) + 5, column=1, pady=10)
+            tk.Button(self.root, text="Cancel", font=("Times New Roman", 12), command=self.menuPage).grid(row=len(fields) + 6, column=1, pady=10)
 
 
     def deleteMenuItemButton(self, item):
@@ -330,7 +326,7 @@ class cafeGUI():
         self.items = []
         menu_items = m.MenuItem.getMenuItems(m.MenuItem)
         for name, description, price, stock, calories, category, image in menu_items:
-            self.items.append(menuItemButton(self, name, description, price, stock, calories, category, "images\images.png", image))
+            self.items.append(menuItemButton(self, name, description, price, stock, calories, category, image, image))
         self.menuPage()
 
 
