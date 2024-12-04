@@ -7,8 +7,8 @@ import login as l
 import newItem as new
 import checkout as ch
 import payment as pay
-#import orderStatus as os
-#import treeView as tv
+import orderStatus as os
+import treeView as tv
 from PIL import Image, ImageTk #used pip install pillow if its not working
 
 
@@ -56,7 +56,7 @@ side note: I created widgets in the __init__ but only put them into a grid in th
 class cafeGUI(): 
     def __init__(self): #note to self: no widgets should be "run" here! they should only be added to the functions for pages!
         self.root = tk.Tk()
-        self.root.geometry("820x560")
+        self.root.geometry("820x1080")
         self.root.title("Cafe Webpage") 
         
         self.pageIndex = 0
@@ -112,7 +112,6 @@ class cafeGUI():
         self.buttonStaffView.grid(row=0, column=5, pady=6)
 
     def menuPage(self):
-        self.label1.grid(row = 1, column = 0, rowspan=5, pady = 2)
         self.clearPage()
         self.naviBar()
         self.buttonOrder.grid(row=2, column = 6, pady = 6, padx = 6)
